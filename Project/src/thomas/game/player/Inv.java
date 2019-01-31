@@ -15,6 +15,4 @@ public interface Inv {
 	void dropItem(Item item);
 
 	String toString(Item inv);
-
-	void checkInv(Inventory[] inv2);
 }

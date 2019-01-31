@@ -3,18 +3,20 @@ package thomas.game.player;
 import java.util.Arrays;
 import java.util.Scanner;
 import thomas.game.GameObject;
-import thomas.game.items.Item; 
+import thomas.game.items.Item;
+import thomas.game.items.Sword;
 import thomas.game.player.Inventory;
+@SuppressWarnings("unused")
 public class Player implements Inv{
-	Inventory[] inv = new Inventory[5];
+	Item sword = new Sword();
+	public Item[] inv = Inventory.inv;
 	boolean isChecking;
 		int location;
-		int c;
+		int c = 0;
 public static String playerName;
 	String yes = "yes";
 	Scanner p = new Scanner(System.in);
 	public void setPlayerName(){
-		
 		System.out.println("What is your Name?");
 		@SuppressWarnings("resource")
 		final Scanner sc = new Scanner(System.in);
@@ -39,15 +41,16 @@ public static String playerName;
 		 
 		 return playerName;
 	 }
-		public void pickUp(Inventory item) {
+		public void pickUp(Item item) {
 			
-			if(item.inInv !=  true && c < inv.length && this.inv[c] == null){ 
+			if(item.inInv !=  true && c < inv.length && inv[c] == Inventory.empty){ 
 				item.inInv = true;
+				inv[c] = item;
 				System.out.println("you picked up: " + item.toString());
 				
 		}else if(item.inInv ==  true && c < inv.length){
 			
-				item.itemQ++;
+				item.quantity++;
 				System.out.println("you picked up: " + item.toString());
 				
 			}else if(c < inv.length){
@@ -65,34 +68,16 @@ public static String playerName;
 			item.toString();
 		}
 
+	public String toString(Inventory inv2) {
+		return "Player [inv=" + toString(inv2) + ", c=" + c + "]";
+		}
+
+
+
 	@Override
-	public Item[] getItem(Item item) {
+	public void checkInv(Item[] inv) {
 		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-
-	@Override
-	public void checkInv(Inventory[] inv2){
 		
-			isChecking = true;
-		while(c<= inv2.length){
-			
-			System.out.println(toString(inv2));
-			c++;
-		}
-			if(isChecking == true){
-			System.out.println("continue? ");
-			GameObject.answer= GameObject.in.nextLine();
-		
-		}
-}
-
-
-
-	public String toString(Inventory[] inv2) {
-		return "Player [inv=" + toString(inv2[c]) + ", c=" + c + "]";
 	}
 
 
@@ -114,17 +99,8 @@ public static String playerName;
 
 
 	@Override
-	public void pickUp(Item item) {
+	public Item[] getItem(Item item) {
 		// TODO Auto-generated method stub
-		
+		return null;
 	}
-
-
-
-	@Override
-	public void checkInv(Item[] inv) {
-		// TODO Auto-generated method stub
-		
 	}
-
-}

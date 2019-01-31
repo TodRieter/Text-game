@@ -1,6 +1,9 @@
 package thomas.game.player;
 
+import java.util.Arrays;
+
 import thomas.game.GameObject;
+import thomas.game.items.Empty;
 import thomas.game.items.Item;
 
 public class Inventory{
@@ -9,34 +12,35 @@ public class Inventory{
 	Item brass;
 	public int slot;
 	boolean inInv;
-	public Inventory[] inv;
+	static Item empty = new Empty();
+	public static Item[] inv = {empty,empty,empty,empty,empty};
 	
 	Item item;
 	String name;
-	int lenght = inv.length;
+	int length = inv.length;
 	boolean isChecking;
 	public int itemQ;
-	
-	public Inventory[] getItem(Item item) {
+	 
+	public Item getItem(Item item) {
 		
-		return this.inv;
+		return this.item;
 	}
 	
-public void checkInv(Item[] inv2){
+public void checkInv(Item[] inv){
 		if(GameObject.answer.equals("check inv")) {
 			isChecking = true;
-		while(c<= lenght){
-			System.out.println(inv2[c]);
-		}
+			Arrays.toString(inv);
 		}else if(isChecking == true){
 			System.out.println("continue? ");
 			GameObject.answer= GameObject.in.nextLine();
 		}
+
 }
-	int checkForNull(Inventory inv[]){
+	int checkForNull(Item inv[]){
 		while(c<2 && inv[slot] != null){
 			
 			if(inv[slot]==null) {
+				return slot;
 			
 			}else if(slot<inv.length) {
 				
@@ -54,7 +58,7 @@ public void checkInv(Item[] inv2){
 		
 		if(item.inInv !=  true && slot < inv.length && inv[slot] == null){ 
 	
-			
+			inv[slot] = item;  
 			
 	}else if(item.inInv ==  true && slot < inv.length){
 		
@@ -64,7 +68,7 @@ public void checkInv(Item[] inv2){
 		}else if(slot < inv.length){
 			
 			item.inInv = true;
-			inv[slot] = this;
+			inv[slot] = this.item;
 			System.out.println("you picked up: " + item.toString());
 			slot++; 
 			
