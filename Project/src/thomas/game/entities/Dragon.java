@@ -1,10 +1,10 @@
-package thomas.game.enemies;
+package thomas.game.entities;
 
-public class Dragon extends Enemy{
+public class Dragon extends Entity{
 	
 	@Override
 	public String toString() {
-		return "Dragon [health=" + health + ", attack=" + attack + ", armor=" + armor + ", name=" + name + "]";
+		return "Dragon [health= " + health + ", attack= " + attack + ", armor= " + armor + ", name= " + name + "]";
 	}
 	public Dragon(){
 	super("Dragon", 10, 8, 10);

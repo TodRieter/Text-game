@@ -8,7 +8,7 @@ public class Empty extends Item {
 	}
 
 	public Empty(){
-	super("empty", 0, true);
+	super("empty", 0, true, null);
 	
 	}
 }

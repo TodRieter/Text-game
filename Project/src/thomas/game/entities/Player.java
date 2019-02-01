@@ -1,15 +1,27 @@
-package thomas.game.player;
+package thomas.game.entities;
 
 import java.util.Arrays;
 import java.util.Scanner;
 import thomas.game.GameObject;
 import thomas.game.items.Item;
-import thomas.game.items.Sword;
+import thomas.game.items.SwordItem;
+import thomas.game.player.Inv;
 import thomas.game.player.Inventory;
 @SuppressWarnings("unused")
-public class Player implements Inv{
-	Item sword = new Sword();
-	public Item[] inv = Inventory.inv;
+public class Player extends Entity{
+	@Override
+	public String toString() {
+		return "name: " + playerName + "\nhealth: " + health + "\nattack: " + attack + "\narmor: " + armor;
+	}
+	public Player(){
+		super(playerName, 20, 2, 1);	
+	}
+	Player(String name, int health, int attack, int armor, Item[] inv){
+
+	}
+
+	Item sword = new SwordItem();
+	public static Item[] inv = Inventory.inv;
 	boolean isChecking;
 		int location;
 		int c = 0;
@@ -70,37 +82,5 @@ public static String playerName;
 
 	public String toString(Inventory inv2) {
 		return "Player [inv=" + toString(inv2) + ", c=" + c + "]";
-		}
-
-
-
-	@Override
-	public void checkInv(Item[] inv) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-
-	@Override
-	public void dropItem(Item item) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-
-	@Override
-	public String toString(Item inv) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-
-	@Override
-	public Item[] getItem(Item item) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		}	
 	}

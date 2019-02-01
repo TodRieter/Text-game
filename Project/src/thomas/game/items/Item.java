@@ -9,6 +9,7 @@ public abstract class Item {
 	public String name;
 	public int quantity;
 	public boolean inInv = false;
+	public String info;
 	
 public Item() {
 		
@@ -16,11 +17,12 @@ public Item() {
 		
 	}
 	
-	public Item(String name, int quantity, boolean inInv) {
+	public Item(String name, int quantity, boolean inInv, String info) {
 		
 		this.name = name;
 		this.quantity = quantity;
 		this.inInv = inInv;
+		this.info = info;
 			
 		}
 	

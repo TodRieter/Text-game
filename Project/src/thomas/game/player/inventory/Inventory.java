@@ -1,4 +1,4 @@
-package thomas.game.player;
+package thomas.game.player.inventory;
 
 import java.util.Arrays;
 
@@ -12,7 +12,7 @@ public class Inventory{
 	Item brass;
 	public int slot;
 	boolean inInv;
-	public static Item empty = new Empty();
+	static Item empty = new Empty();
 	public static Item[] inv = {empty,empty,empty,empty,empty};
 	
 	Item item;

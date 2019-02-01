@@ -6,19 +6,21 @@ import java.util.Scanner;
 
 import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
-import thomas.game.enemies.Dragon;
-import thomas.game.enemies.Enemy;
+import thomas.game.entities.Blob;
+import thomas.game.entities.Dragon;
+import thomas.game.entities.Entity;
+import thomas.game.entities.Player;
+import thomas.game.items.Empty;
 import thomas.game.items.Item;
-import thomas.game.items.Sword;
+import thomas.game.items.SwordItem;
 import thomas.game.player.Inv;
 import thomas.game.player.Inventory;
-import thomas.game.player.Player;
 
 public class GameObject {
 
 	public static int location = 1;
-	Enemy dragon = new Dragon();
-	Item sword = new Sword();
+	Entity dragon = new Dragon();
+	Item sword = new SwordItem();
 	public static Scanner in = new Scanner(System.in);
 	Player player = new Player();
 	public static String answer;
@@ -42,7 +44,7 @@ public class GameObject {
 					player.pickUp(sword);
 					player.pickUp(sword);
 					player.pickUp(sword);
-					player.pickUp(sword);
+					player.pickUp(sword); 
 
 				} else if(answer.equalsIgnoreCase("no")) {
 					System.out.println("you decide to not pick up the sword");
@@ -52,15 +54,33 @@ public class GameObject {
 				break;
 
 			case 1:
-				System.out.print(Arrays.toString(player.inv));
-				location = -1;
+				System.out.print(Arrays.toString(Player.inv));
+				location =2;
 				break;
-
+			case 2: 
+				Entity blob = new Blob();
+				ask(in,"you enter a dark hallway and see a amorphus blob do you\n fight, run like a coward or freeze(not recommended)");
+				if(answer.equalsIgnoreCase("fight")) 
+				{while(player.health > 0){
+					
+				}
+				}else if(answer.equalsIgnoreCase("run")) {
+				System.out.println("you run like a coward");
+				location = 4;
+				}
+				break;
+			case 3:
+				ask(in,"this is game is unfinished!");
+				 System.out.println(dragon);
+				break;
+			case 4:
+				ask(in,"this is game is unfinished!");
+				break;
 			default:
 				isAlive = false;
 				break;
 
-			// System.out.println(dragon);
+
 
 			}
 		}
@@ -72,7 +92,14 @@ public class GameObject {
 		System.out.println(this.question);
 		answer = in.nextLine();
 		if(answer.equalsIgnoreCase("check inv")) {
-	System.out.print(Arrays.toString(player.inv));
+	System.out.print(Arrays.toString(Player.inv));
+		} else if(answer.equalsIgnoreCase("check inv 0")) {
+	System.out.print(Player.inv[0]);
+		} else if(answer.equalsIgnoreCase("drop 0")) {
+			Item empty = new Empty();
+	Player.inv[0] = empty;
+		}else if(answer.equalsIgnoreCase("Stats")) {
+			System.out.println(player);
 		}
 	}
 	

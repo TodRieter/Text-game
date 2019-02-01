@@ -1,6 +1,6 @@
-package thomas.game.enemies;
+package thomas.game.entities;
 
-public abstract class Enemy {
+public abstract class Entity {
 	
 	public int health;
 	public int attack;
@@ -8,13 +8,13 @@ public abstract class Enemy {
 	public String name;
 	public String stats;
 	
-	public Enemy() {
+	public Entity() {
 		
 		System.out.printf("Stats: ", this);
 		
 	}
 	
-	Enemy(String name, int health, int attack, int armor){
+	Entity(String name, int health, int attack, int armor){
 		
 		this.health = health;
 		this.armor = armor;
