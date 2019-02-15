@@ -1,5 +1,7 @@
 package thomas.game.entities;
 
+import thomas.game.GameObject;
+
 public abstract class Entity {
 	
 	public int health;
@@ -38,9 +40,36 @@ public String getStats(){
 		
 		return this.attack;
 	}
-	public void attack(){
-		
-		health = getHealth() - getAttack();
-		
+	public void attack(Entity target){
+		if(this.health > 0 && target.health != 0){
+		target.health = target.getHealth() - getAttack();
+		this.health = getHealth() - target.getAttack();
+		System.out.print(toString() + "\n\n" + target.toString() + "\n");
+		}
 	}
-}
+		public void fight(Entity target) {
+			if(GameObject.answer.equalsIgnoreCase("fight")){
+				
+				while(this.health > 0 && GameObject.answer.equalsIgnoreCase("fight")){		
+					this.attack(target);
+				if(this.health <= 0) {
+					GameObject.isAlive = false;
+					System.out.println("YOU DIED :(");
+					break;
+				}else if(target.health > 0) {
+					
+				GameObject.ask("fight or run");
+				
+				}else if(target.health <= 0){
+					
+					System.out.println("The " + target.name + " has been slane!");
+					GameObject.location++;
+					System.out.println(GameObject.location);
+					break;
+				}
+			}
+			}else if(GameObject.answer.equalsIgnoreCase("run")) {
+			System.out.println("you run like a coward");
+			}
+		}
+	}

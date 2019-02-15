@@ -1,6 +1,6 @@
 package thomas.game.weapons;
 
-public class Weapon {
+public abstract class Weapon {
 	String name;
 	int attack;
 	double armorPierce;

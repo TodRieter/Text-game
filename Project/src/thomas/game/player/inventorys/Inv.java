@@ -1,4 +1,4 @@
-package thomas.game.player.inventory;
+package thomas.game.player.inventorys;
 
 import thomas.game.items.Item;
 

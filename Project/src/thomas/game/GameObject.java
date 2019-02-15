@@ -1,11 +1,8 @@
 package thomas.game;
 
-import java.util.ArrayList;
+//import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
-
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
-
 import thomas.game.entities.Blob;
 import thomas.game.entities.Dragon;
 import thomas.game.entities.Entity;
@@ -13,8 +10,7 @@ import thomas.game.entities.Player;
 import thomas.game.items.Empty;
 import thomas.game.items.Item;
 import thomas.game.items.SwordItem;
-import thomas.game.player.Inv;
-import thomas.game.player.Inventory;
+
 
 public class GameObject {
 
@@ -22,7 +18,7 @@ public class GameObject {
 	Entity dragon = new Dragon();
 	Item sword = new SwordItem();
 	public static Scanner in = new Scanner(System.in);
-	Player player = new Player();
+	static Player player = new Player();
 	public static String answer;
 	String question;
 	public static boolean isAlive;
@@ -34,8 +30,9 @@ public class GameObject {
 
 			switch (location) {
 			case 0:
-
-				ask(in, "would you like to pick up a sword? ");
+				location = 1;
+				//ask(in, "would you like to pick up a sword? ");
+				answer = "yes";
 
 				if (answer.equalsIgnoreCase("yes")) {
 
@@ -49,32 +46,30 @@ public class GameObject {
 				} else if(answer.equalsIgnoreCase("no")) {
 					System.out.println("you decide to not pick up the sword");
 				}
-				ask(in, "would you like to check you inv?");
 				location = 1;
 				break;
 
 			case 1:
-				System.out.print(Arrays.toString(Player.inv));
-				location =2;
-				break;
-			case 2: 
 				Entity blob = new Blob();
-				ask(in,"you enter a dark hallway and see a amorphus blob do you\n fight, run like a coward or freeze(not recommended)");
-				if(answer.equalsIgnoreCase("fight")) 
-				{while(player.health > 0){
+				ask("you enter a dark hallway and see a amorphus blob do you\n fight, run like a coward or freeze(not recommended)");
+				if(answer.equalsIgnoreCase("fight")){
 					
-				}
+					player.fight(blob);
 				}else if(answer.equalsIgnoreCase("run")) {
 				System.out.println("you run like a coward");
-				location = 4;
+				location = 3;
 				}
 				break;
+			case 2:
+				System.out.println("This game is unfinished!!");
+				isAlive =false;
+				break;
 			case 3:
-				ask(in,"this is game is unfinished!");
+				ask("this is game is unfinished!");
 				 System.out.println(dragon);
 				break;
 			case 4:
-				ask(in,"this is game is unfinished!");
+				ask("this is game is unfinished!");
 				break;
 			default:
 				isAlive = false;
@@ -86,18 +81,14 @@ public class GameObject {
 		}
 	}
 
-	void ask(Scanner in, String question) {
+	public static void ask(String question) {
 
-		this.question = question;
-		System.out.println(this.question);
+		System.out.println(question);
 		answer = in.nextLine();
 		if(answer.equalsIgnoreCase("check inv")) {
-	System.out.print(Arrays.toString(Player.inv));
-		} else if(answer.equalsIgnoreCase("check inv 0")) {
-	System.out.print(Player.inv[0]);
-		} else if(answer.equalsIgnoreCase("drop 0")) {
-			Item empty = new Empty();
-	Player.inv[0] = empty;
+	System.out.print(Player.inv);
+		} else if(answer.equalsIgnoreCase("check inv")) {
+	System.out.print(Player.inv);
 		}else if(answer.equalsIgnoreCase("Stats")) {
 			System.out.println(player);
 		}

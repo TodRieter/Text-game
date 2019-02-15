@@ -1,5 +1,6 @@
 package thomas.game.player;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import thomas.game.GameObject;
@@ -13,11 +14,12 @@ public class Inventory{
 	public int slot;
 	boolean inInv;
 	public static Item empty = new Empty();
-	public static Item[] inv = {empty,empty,empty,empty,empty};
+	public static ArrayList<Item> inv;
 	
 	Item item;
 	String name;
-	int length = inv.length;
+	int size = inv.size();
+	int maxSize = 10;
 	boolean isChecking;
 	public int itemQ;
 	 
@@ -26,17 +28,16 @@ public class Inventory{
 		return this.item;
 	}
 	
-public void checkInv(Item[] inv){
+public void checkInv(ArrayList<Item> inv){
 		if(GameObject.answer.equals("check inv")) {
 			isChecking = true;
-			Arrays.toString(inv);
 		}else if(isChecking == true){
 			System.out.println("continue? ");
 			GameObject.answer= GameObject.in.nextLine();
 		}
 
 }
-	int checkForNull(Item inv[]){
+	/*int checkForNull(Item inv[]){
 		while(c<2 && inv[slot] != null){
 			
 			if(inv[slot]==null) {
@@ -54,25 +55,12 @@ public void checkInv(Item[] inv){
 		return slot;
 		
 	}
+	*/
 	public void pickUp(Item item) {
 		
-		if(item.inInv !=  true && slot < inv.length && inv[slot] == null){ 
-	
-			inv[slot] = item;  
-			
-	}else if(item.inInv ==  true && slot < inv.length){
-		
-			item.quantity++;
-			System.out.println("you picked up: " + item.toString());
-			
-		}else if(slot < inv.length){
-			
-			item.inInv = true;
-			inv[slot] = this.item;
-			System.out.println("you picked up: " + item.toString());
-			slot++; 
-			
-		}else if(slot >= inv.length) {
+		if(size < maxSize){
+			inv.add(item);
+		}else if(size == maxSize) {
 			
 			System.out.println("Your backpack is full! you did not pick up: " + item.name);
 		}
@@ -87,8 +75,7 @@ public void checkInv(Item[] inv){
 			
 		}else {
 		item.inInv = false;
-		inv[slot] = null;
-		slot--;
+		inv.remove(item);
 			}
 		}
 	}

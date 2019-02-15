@@ -8,7 +8,7 @@ public class SwordItem extends Item {
 	static String info = Weapon.getInfo(sword);
 	@Override
 	public String toString() {
-		return "Sword" + "(" + quantity + ")" + " " + info + "]";
+		return "Sword" + "(" + quantity + ")" + " " + info;
 	}
 
 	public SwordItem(){

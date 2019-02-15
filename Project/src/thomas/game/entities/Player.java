@@ -1,8 +1,10 @@
 package thomas.game.entities;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 import thomas.game.GameObject;
+import thomas.game.items.Empty;
 import thomas.game.items.Item;
 import thomas.game.items.SwordItem;
 import thomas.game.player.Inv;
@@ -14,17 +16,19 @@ public class Player extends Entity{
 		return "name: " + playerName + "\nhealth: " + health + "\nattack: " + attack + "\narmor: " + armor;
 	}
 	public Player(){
-		super(playerName, 20, 2, 1);	
+		super(playerName, 20, 200, 1);	
 	}
 	Player(String name, int health, int attack, int armor, Item[] inv){
 
 	}
-
-	Item sword = new SwordItem();
-	public static Item[] inv = Inventory.inv;
+    Item empty = new Empty();
+	public static ArrayList<Item> inv = new ArrayList<Item>(1);
+	int size = inv.size();
+	int maxSize = 10;
 	boolean isChecking;
 		int location;
 		int c = 0;
+		
 public static String playerName;
 	String yes = "yes";
 	Scanner p = new Scanner(System.in);
@@ -53,28 +57,20 @@ public static String playerName;
 		 
 		 return playerName;
 	 }
-		public void pickUp(Item item) {
+	 public void pickUp(Item item) {
 			
-			if(item.inInv !=  true && c < inv.length && inv[c] == Inventory.empty){ 
-				item.inInv = true;
-				inv[c] = item;
-				System.out.println("you picked up: " + item.toString());
+			if(inv.size() < maxSize && ! inv.contains(item)){
+				inv.add(item);
+				System.out.println("you picked up: " + inv.get(inv.indexOf(item)));
 				
-		}else if(item.inInv ==  true && c < inv.length){
-			
+			}else if(inv.size() < maxSize && inv.contains(item)) {
+				
 				item.quantity++;
-				System.out.println("you picked up: " + item.toString());
+				System.out.println("you picked up: " + inv.get(inv.indexOf(item)));
+					
+			}else if(size == maxSize) {
 				
-			}else if(c < inv.length){
-				
-				item.inInv = true;
-				inv[c] = item;
-				System.out.println("you picked up: " + item.toString());
-				c++; 
-				
-			}else if(c >= inv.length) {
-				
-				System.out.println("Your backpack is full! you did not pick up: ");
+				System.out.println("Your backpack is full! you did not pick up: " + item.name);
 			}
 			
 			item.toString();
