@@ -10,38 +10,40 @@ import thomas.game.entities.Player;
 import thomas.game.items.Empty;
 import thomas.game.items.Item;
 import thomas.game.items.SwordItem;
+import thomas.game.spells.Spell;
+import thomas.game.spells.melee.BoomHands;
 
 
 public class GameObject {
 
-	public static int location = 1;
+	public static int location;
 	Entity dragon = new Dragon();
 	Item sword = new SwordItem();
 	public static Scanner in = new Scanner(System.in);
-	static Player player = new Player();
+	public static Player player = new Player();
 	public static String answer;
 	String question;
 	public static boolean isAlive;
 
 	public void run() {
-		player.setPlayerName();
-
+		//player.setPlayerName();
+player.name = "Thomas";
+isAlive = true;
 		while (isAlive == true) {
 
 			switch (location) {
 			case 0:
-				location = 1;
-				//ask(in, "would you like to pick up a sword? ");
+				//location = 1;
+				ask("would you like to pick up a sword? ");
 				answer = "yes";
 
 				if (answer.equalsIgnoreCase("yes")) {
 
 					player.pickUp(sword);
-					player.pickUp(sword);
-					player.pickUp(sword);
-					player.pickUp(sword);
-					player.pickUp(sword);
-					player.pickUp(sword); 
+					Spell BoomHands = new BoomHands();
+					player.learnSpell(BoomHands);
+				ask("You learned BoomHands to look at your list of spells type spell list ");
+				
 
 				} else if(answer.equalsIgnoreCase("no")) {
 					System.out.println("you decide to not pick up the sword");
@@ -52,10 +54,8 @@ public class GameObject {
 			case 1:
 				Entity blob = new Blob();
 				ask("you enter a dark hallway and see a amorphus blob do you\n fight, run like a coward or freeze(not recommended)");
-				if(answer.equalsIgnoreCase("fight")){
-					
 					player.fight(blob);
-				}else if(answer.equalsIgnoreCase("run")) {
+				if(answer.equalsIgnoreCase("run")) {
 				System.out.println("you run like a coward");
 				location = 3;
 				}
@@ -86,11 +86,13 @@ public class GameObject {
 		System.out.println(question);
 		answer = in.nextLine();
 		if(answer.equalsIgnoreCase("check inv")) {
-	System.out.print(Player.inv);
+	System.out.print(player.inv);
 		} else if(answer.equalsIgnoreCase("check inv")) {
-	System.out.print(Player.inv);
+	System.out.print(player.inv);
 		}else if(answer.equalsIgnoreCase("Stats")) {
 			System.out.println(player);
+		}else if(answer.equalsIgnoreCase("spell List")){
+			System.out.print(player.spellList());
 		}
 	}
 	
