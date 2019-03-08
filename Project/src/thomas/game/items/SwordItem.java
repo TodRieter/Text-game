@@ -1,5 +1,6 @@
 package thomas.game.items;
 
+import thomas.game.enums.Rarity;
 import thomas.game.weapons.Sword;
 import thomas.game.weapons.Weapon;
 
@@ -12,7 +13,7 @@ public class SwordItem extends Item {
 	}
 
 	public SwordItem(){
-	super("sword", 1, false, info);
+	super("sword", 1, false, info, Rarity.MEH);
 	
 	}
 	SwordItem(String name, int quantity, boolean inInv, int attack, int piercing){

@@ -1,17 +1,12 @@
 package thomas.game;
 
 //import java.util.ArrayList;
-import java.util.Arrays;
+
 import java.util.Scanner;
-import thomas.game.entities.Blob;
-import thomas.game.entities.Dragon;
-import thomas.game.entities.Entity;
-import thomas.game.entities.Player;
-import thomas.game.items.Empty;
-import thomas.game.items.Item;
-import thomas.game.items.SwordItem;
-import thomas.game.spells.Spell;
-import thomas.game.spells.melee.BoomHands;
+import thomas.game.entities.*;
+import thomas.game.items.*;
+import thomas.game.spells.*;
+import thomas.game.spells.melee.Boomhands;
 
 
 public class GameObject {
@@ -26,24 +21,29 @@ public class GameObject {
 	public static boolean isAlive;
 
 	public void run() {
-		//player.setPlayerName();
-player.name = "Thomas";
+		
+		ask("Greetings Would You like to play a game of >>Generic Adventure<< ?" + "\n type yes or no");
+		player.setPlayerName();
+
 isAlive = true;
 		while (isAlive == true) {
 
 			switch (location) {
 			case 0:
 				//location = 1;
+				Entity dragon  = new Dragon();
+				System.out.println(dragon);
 				ask("would you like to pick up a sword? ");
+				
+				
 				answer = "yes";
 
 				if (answer.equalsIgnoreCase("yes")) {
 
 					player.pickUp(sword);
-					Spell BoomHands = new BoomHands();
+					Spell BoomHands = new Boomhands();
 					player.learnSpell(BoomHands);
 				ask("You learned BoomHands to look at your list of spells type spell list ");
-				
 
 				} else if(answer.equalsIgnoreCase("no")) {
 					System.out.println("you decide to not pick up the sword");
@@ -53,7 +53,7 @@ isAlive = true;
 
 			case 1:
 				Entity blob = new Blob();
-				ask("you enter a dark hallway and see a amorphus blob do you\n fight, run like a coward or freeze(not recommended)");
+				System.out.print("you enter a dark hallway and see a amorphus blob\n");
 					player.fight(blob);
 				if(answer.equalsIgnoreCase("run")) {
 				System.out.println("you run like a coward");
@@ -66,7 +66,7 @@ isAlive = true;
 				break;
 			case 3:
 				ask("this is game is unfinished!");
-				 System.out.println(dragon);
+				 //System.out.println(dragon);
 				break;
 			case 4:
 				ask("this is game is unfinished!");

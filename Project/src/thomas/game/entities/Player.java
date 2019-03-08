@@ -3,7 +3,7 @@ package thomas.game.entities;
 import java.util.ArrayList;
 import java.util.Scanner;
 import thomas.game.GameObject;
-import thomas.game.items.Empty;
+import thomas.game.enums.Rarity;
 import thomas.game.items.Item;
 import thomas.game.player.Inventory;
 import thomas.game.spells.Spell;
@@ -13,7 +13,7 @@ public class Player extends Entity{
 	public ArrayList<Spell> spellList = new ArrayList<Spell>(); 
 	
 	public Player(){
-		super(playerName, 20, 5, 1, 50);	
+		super(playerName, 20, 5, 1, 50, Rarity.UBERRARE);	
 	}
 
 	Player(String name, int health, int attack, int armor, int mana, ArrayList<Item> inv, ArrayList<Spell> spellList){
@@ -25,7 +25,7 @@ public class Player extends Entity{
 	public String toString() {
 		return "name: " + playerName + "\nhealth: " + health + "\nmana: " + mana + "\nattack: " + attack + "\narmor: " + armor;
 	}
-    Item empty = new Empty();
+
 	public ArrayList<Item> inv = new ArrayList<Item>(1);
 	int size = inv.size();
 	int maxSize = 10;

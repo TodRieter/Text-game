@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import thomas.game.GameObject;
-import thomas.game.items.Empty;
+
 import thomas.game.items.Item;
 
 public class Inventory{
@@ -13,7 +13,6 @@ public class Inventory{
 	Item brass;
 	public int slot;
 	boolean inInv;
-	public static Item empty = new Empty();
 	public static ArrayList<Item> inv;
 	
 	Item item;
