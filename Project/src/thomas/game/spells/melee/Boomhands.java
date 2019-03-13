@@ -1,6 +1,7 @@
 package thomas.game.spells.melee;
 
 import thomas.game.enums.*;
+import thomas.game.items.Item;
 import thomas.game.spells.Spell;
 
 public class Boomhands extends Spell{
@@ -14,5 +15,20 @@ public class Boomhands extends Spell{
 
 	public Boomhands(){
 		super("Boomhands", 5, 5, Effect.BACKFIRE);
+	}
+	@Override
+	public void affect(Effect effect) {
+		this.affect(effect);
+		
+	}
+	@Override
+	public String name() {
+		
+		return null;
+	}
+	@Override
+	public Item toItem() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

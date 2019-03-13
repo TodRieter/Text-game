@@ -57,8 +57,7 @@ public String getStats(){
 		return this.attack;
 	}
 	public String name(){
-		this.name = (char)27 + this.rareness.code() + this.name + (char)27 + Colors.RESET.color;
-		return this.name;
+		return (char)27 + rareness.code() + name + (char)27 + Colors.RESET.color;
 	}
 	public void attack(Entity target){
 		if(this.health > 0 && target.health != 0){
@@ -69,7 +68,8 @@ public String getStats(){
 	}
 	
 	public void fight(Entity target) {
-			GameObject.ask("test number 75 You have encountered a " + target.name + " do you?\n slash, cast, run or freeze(not recommended but you have the option!)");
+		
+			GameObject.ask("test number 75 You have encountered a " + target.name() + " do you?\n slash, cast, run or freeze(not recommended but you have the option!)");
 			//System.out.println((char)27 + "[31m" + "ERROR MESSAGE IN RED");
 			if(GameObject.answer.equalsIgnoreCase("Attack") || GameObject.answer.equalsIgnoreCase("cast")){
 				while(this.health > 0 && ! GameObject.answer.equalsIgnoreCase("run")){
@@ -87,7 +87,7 @@ public String getStats(){
 							
 							 
 							 if(!targetName.equals(target.name)){
-								 System.out.println("error 404 enemy not found... if you actually saw " + name + " please consult a your mental health doctor");
+								 System.out.println("error 404 enemy not found... if you actually saw " + target.name() + " please consult a your mental health doctor");
 							 }else {
 							 for(int x = 0; GameObject.player.spellList.size() > x;){
 
@@ -113,7 +113,7 @@ public String getStats(){
 				
 				}else if(target.health <= 0){
 					
-					System.out.println("The " + target.name + " has been slane!");
+					System.out.println("The " + target.name() + " has been slane!");
 					GameObject.location++;
 					System.out.println(GameObject.location);
 					break;

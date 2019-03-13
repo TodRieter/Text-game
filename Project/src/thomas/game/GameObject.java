@@ -7,6 +7,8 @@ import thomas.game.entities.*;
 import thomas.game.items.*;
 import thomas.game.spells.*;
 import thomas.game.spells.melee.Boomhands;
+import thomas.game.weapons.FireSword;
+import thomas.game.weapons.Weapon;
 
 
 public class GameObject {
@@ -33,14 +35,15 @@ isAlive = true;
 				//location = 1;
 				Entity dragon  = new Dragon();
 				System.out.println(dragon);
-				ask("would you like to pick up a sword? ");
+				Weapon fireSword = new FireSword();
+				ask("would you like to pick up a " + fireSword.name());
 				
 				
 				answer = "yes";
 
 				if (answer.equalsIgnoreCase("yes")) {
 
-					player.pickUp(sword);
+					player.pickUp(fireSword.item);
 					Spell BoomHands = new Boomhands();
 					player.learnSpell(BoomHands);
 				ask("You learned BoomHands to look at your list of spells type spell list ");
@@ -53,7 +56,7 @@ isAlive = true;
 
 			case 1:
 				Entity blob = new Blob();
-				System.out.print("you enter a dark hallway and see a amorphus blob\n");
+				System.out.print("you enter a dark hallway and see a amorphus " + blob.name() + "\n");
 					player.fight(blob);
 				if(answer.equalsIgnoreCase("run")) {
 				System.out.println("you run like a coward");

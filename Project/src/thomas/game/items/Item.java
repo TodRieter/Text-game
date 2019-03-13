@@ -29,7 +29,7 @@ public Item() {
 		}
 	
 	
-	String getName(){
+	String name(){
 		
 		return this.rareness.code() + name + Colors.RESET.color;
 		
@@ -38,7 +38,7 @@ public Item() {
 
 	@Override
 	public String toString() {
-		return "Item [name=" + name + ", quantity=" + quantity +  "]";
+		return name() + ", quantity=" + quantity +  "]";
 	}
 	
 }

@@ -3,16 +3,17 @@ package thomas.game.weapons;
 import thomas.game.enums.Effect;
 import thomas.game.enums.Rarity;
 import thomas.game.items.Item;
-import thomas.game.items.SwordItem;
+import thomas.game.items.FireSwordItem;
 
-public class Sword extends Weapon{
-	static Item swordItem = new SwordItem();
+public class FireSword extends Weapon{
+	static Item fireSword = new FireSwordItem();
 	public String toString() {
 		return name() + " attack: " + attack + " piercing: " + armorPierce + effect;
 	}
-	public Sword(){
-		super("Sword", 10, 1, null, Rarity.MEH, swordItem);
+	public FireSword(){
+		super("FireSword", 10, 1, Effect.FLAME, Rarity.ACMERARE, fireSword);
 	}
+	
 	@Override
 	public void affect(Effect effect) {
 		affect(effect);
@@ -22,5 +23,5 @@ public class Sword extends Weapon{
 	public Item toItem() {
 		return item;
 	}
-
+	
 }

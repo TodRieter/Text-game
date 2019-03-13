@@ -3,8 +3,10 @@ package thomas.game.weapons;
 import thomas.game.enums.Colors;
 import thomas.game.enums.Effect;
 import thomas.game.enums.Rarity;
+import thomas.game.interfaces.IWeaponSpell;
+import thomas.game.items.Item;
 
-public abstract class Weapon {
+public abstract class Weapon implements IWeaponSpell{
 //	public enum Effect {
 //
 //		BACKFIRE("hurts the user"), FLAME("sets the enemy on fire"), SAP("gain life from damage delt");
@@ -22,15 +24,17 @@ public abstract class Weapon {
 	double armorPierce;
 	Effect effect;
 	Rarity rareness;
+	public Item item;
 	public Weapon(){
 		System.out.printf(" " + this);
 	}
-	public Weapon(String name, int attack, double armorPierce, Effect effect, Rarity rareness) {
+	public Weapon(String name, int attack, double armorPierce, Effect effect, Rarity rareness, Item item) {
 		this.name = name;
 		this.attack = attack;
 		this.armorPierce = armorPierce;
 		this.effect = effect;
 		this.rareness = rareness;
+		this.item = item;
 	}
 	public static String getInfo(Weapon weapon) {
 		return "info: " + weapon;
