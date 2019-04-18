@@ -3,9 +3,22 @@ package thomas.game;
 //import java.util.ArrayList;
 
 import java.util.Scanner;
-import thomas.game.entities.*;
-import thomas.game.items.*;
-import thomas.game.spells.*;
+
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
+
+import thomas.game.entities.Blob;
+import thomas.game.entities.Dragon;
+import thomas.game.entities.Entity;
+import thomas.game.entities.Player;
+import thomas.game.gui.AnswerEvent;
+import thomas.game.gui.AnswerListener;
+import thomas.game.gui.AnswerPanel;
+import thomas.game.gui.Gui;
+import thomas.game.gui.MainFrame;
+import thomas.game.items.Item;
+import thomas.game.items.SwordItem;
+import thomas.game.spells.Spell;
 import thomas.game.spells.melee.Boomhands;
 import thomas.game.weapons.FireSword;
 import thomas.game.weapons.Weapon;
@@ -23,7 +36,7 @@ public class GameObject {
 	public static boolean isAlive;
 
 	public void run() {
-		
+		Gui.run();
 		ask("Greetings Would You like to play a game of >>Generic Adventure<< ?" + "\n type yes or no");
 		player.setPlayerName();
 

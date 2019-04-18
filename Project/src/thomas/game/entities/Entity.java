@@ -1,11 +1,8 @@
 package thomas.game.entities;
 import thomas.game.GameObject;
 import thomas.game.enums.Colors;
-import thomas.game.enums.Effect;
 import thomas.game.enums.Rarity;
 import thomas.game.spells.Spell;
-
-import java.util.Arrays;
 import java.util.HashMap;
 
 

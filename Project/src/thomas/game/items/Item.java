@@ -38,7 +38,7 @@ public Item() {
 
 	@Override
 	public String toString() {
-		return name() + ", quantity=" + quantity +  "]";
+		return name() + "(" + quantity +  ")";
 	}
 	
 }
