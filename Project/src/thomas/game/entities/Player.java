@@ -81,6 +81,7 @@ public void setPlayerName(){
 	}
  public void learnSpell(Spell spell){
 	 this.spellList.add(spell);
+	 System.out.println(spell.name);
  }
  public String getSpellList(){
 	 return "you know the spells: " + this.spellList.toString();

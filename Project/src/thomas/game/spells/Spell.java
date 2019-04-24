@@ -6,14 +6,16 @@ import java.util.HashMap;
 
 public abstract class Spell implements IWeaponSpell{
 	public String name;
+	public int level;
 	public int cost;
 	public int attack;
 	public Effect effect;
 	public int range;
 	int timer;
 	
-	public Spell(String name, int cost, int attack, Effect effect){
-		this.name = name;
+	public Spell(String name, int level, int cost, int attack, Effect effect){
+		this.name = this.color(level) + name;
+		this.level = level;
 		this.cost = cost;
 		this.attack = attack;
 		this.effect = effect;
@@ -50,6 +52,22 @@ public abstract class Spell implements IWeaponSpell{
 		}else if (caster.mana <= this.cost){
 			System.out.println("You don't have enough mana!\n" + caster);
 		}
+	}
+	public Colors color(int level){
+		switch(level){
+		case 1:
+			return Colors.BLUE;
+		case 2:
+			return Colors.GREEN;
+		case 3: 
+			return Colors.YELLOW;
+		default:
+		return Colors.WHITE;
+		}
+	}
+	public String name(){
+		return color(this.level) + this.name + Colors.RESET;
+		
 	}
 	public static HashMap<String, Spell> Spells = new HashMap<String, Spell>();
 }

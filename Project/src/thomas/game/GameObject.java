@@ -59,7 +59,8 @@ isAlive = true;
 					player.pickUp(fireSword.item);
 					Spell BoomHands = new Boomhands();
 					player.learnSpell(BoomHands);
-				ask("You learned BoomHands to look at your list of spells type spell list ");
+					System.out.println(BoomHands.name);
+				ask("You learned" + BoomHands.name() + " to look at your list of spells type spell list ");
 
 				} else if(answer.equalsIgnoreCase("no")) {
 					System.out.println("you decide to not pick up the sword");
