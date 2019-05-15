@@ -92,8 +92,15 @@ if(answer.equals("go to the door"))
 						+ "you hear a sound that sounds like a mixture of a air horn, a tornado siren, and elephant that is dying in the desert next to a camel that got stuck in the sand.\n"
 						+ " Well the alarm has been sounded (and apparently it has a sense of dramatic timing) do you?", 
 						"pretend it wasn't you", "go to the bookshelf", "go to the bed", "checkout the grate");
-				if(answer.equals("go to the bookshelf") && (location != 3)){
+				if(answer.equals("go to the bookshelf")){
 					location = 3;
+				}
+				if(answer.equals("pretend it wasn't you")){
+					location = 7;
+				}if(answer.equals("go to the bed") ){
+					location = 4;
+				}if(answer.equals("checkout the grate")){
+					location = 1;
 				}
 				break;
 			case 3:
@@ -108,10 +115,16 @@ if(answer.equals("go to the door"))
 				}
 				break;
 			case 4:
-				ask("you go to the bed. At first you considered taking a nap but you feel something cold sharp it feels like a knife but it's a bit too big its more like a sword.\n"
-						+ " You stand up and on closer examination it isn't like a sword, it is a sword! you look around the room and realize that this is a demo,\n"
-						+ " and that you should probably explore either the book shelf or the grate or the door. do you", "go to the bookshelf","go to the grate","go to the door", "HA im a rebel im going to take a nap!");
-				if(answer.equals("go to the bookshelf")) {
+				display("you go to the bed. At first you considered taking a nap but you feel something cold sharp it feels like a knife\n "
+						+ "but it's a bit too big its more like a sword. You stand up and on closer examination it isn't like a sword, it is a sword!\n "
+						+ "you picked up a boring normal sword.");
+				Weapon sword = new Sword();
+				pickUp(sword);
+				ask("you look around the room and realize that this is a demo,\n"
+						+ " and that you should probably explore either the book shelf or the grate or the door. do you"
+						, "go to the bookshelf","go to the grate","go to the door", "HA im a rebel im going to take a nap!");
+				
+				if(answer.equals("go to the bookshelf")) {	
 					location = 3;
 				}
 				if(answer.equals("go to the grate")) {
@@ -140,6 +153,11 @@ if(answer.equals("go to the door"))
 					display("you run like a coward");
 					location = 5;
 				}
+				if(answer.equals("freeze")) {
+					player.health = 0;
+					display("YOU DIED :(\n I told you it freezing was a bad idea!");
+					isAlive = false;
+				}
 				break;
 			case 7: 
 				ask("Who are you trying to convince?", "yourself", "the people who are not there", "three people me, myself, and I", "my doctor");
@@ -161,6 +179,7 @@ if(answer.equals("go to the door"))
 			int size = inv.size();
 			if(inv.size() < maxSize && ! inv.contains(item)){
 				inv.add(item);
+				gG.update();
 				display("you picked up: " + inv.get(inv.indexOf(item)));
 				
 			}else if(inv.size() < maxSize && inv.contains(item)) {
@@ -175,6 +194,7 @@ if(answer.equals("go to the door"))
 			
 			display(item.toString());
 			inventoryList = inv;
+			
 		}
 public void display(String text){
 	ask(text,"continue","","","");
@@ -257,7 +277,7 @@ public void removeEnemy(Entity enemy) {
 			System.out.println(location);
 			gG.gameArea.setText("");
 		display("you run like a coward");
-		}else if(answer.contains("freeze")) {
+		}else if(answer.contains("freeze")||answer.equalsIgnoreCase("freeze")) {
 			player.health = 0;
 			display("YOU DIED :(\n"
 					+ "I told you freezing was a bad Idea!");

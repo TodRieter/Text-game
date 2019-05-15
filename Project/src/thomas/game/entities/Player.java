@@ -63,8 +63,7 @@ public void setPlayerName(){
 
 
 
- public static String getPlayerName(){
-	 
+ public static String getPlayerName(){	 
 	 return playerName;
  }
 

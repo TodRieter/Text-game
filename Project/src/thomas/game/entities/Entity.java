@@ -27,8 +27,7 @@ public abstract class Entity{
 		this.health = health;
 		this.armor = armor;
 		this.attack = attack;	
-		this.mana = mana;
-		
+		this.mana = mana;		
 		this.name = name;
 		Entities.put(this.name, this);
 		
