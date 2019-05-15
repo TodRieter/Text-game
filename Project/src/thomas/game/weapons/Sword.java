@@ -6,12 +6,15 @@ import thomas.game.items.Item;
 import thomas.game.items.SwordItem;
 
 public class Sword extends Weapon{
-	static Item swordItem = new SwordItem();
+	Item swordItem = new SwordItem();
 	public String toString() {
-		return name() + " attack: " + attack + " piercing: " + armorPierce + effect;
+		return name + " attack: " + attack + " piercing: " + armorPierce + effect;
 	}
 	public Sword(){
-		super("Sword", 10, 1, null, Rarity.MEH, swordItem);
+		super("Sword", 10, 1, null);
+	}
+	public Sword(String name, int atk, int pierce, Effect effect){
+		super(name, atk, pierce, effect);
 	}
 	@Override
 	public void affect(Effect effect) {

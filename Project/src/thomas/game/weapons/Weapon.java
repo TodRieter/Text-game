@@ -19,8 +19,8 @@ public abstract class Weapon implements IWeaponSpell{
 //			return this.info;
 //		}
 //	}
-	String name;
-	int attack;
+	public String name;
+	public int attack;
 	double armorPierce;
 	Effect effect;
 	Rarity rareness;
@@ -28,13 +28,13 @@ public abstract class Weapon implements IWeaponSpell{
 	public Weapon(){
 		System.out.printf(" " + this);
 	}
-	public Weapon(String name, int attack, double armorPierce, Effect effect, Rarity rareness, Item item) {
+	public Weapon(String name, int attack, double armorPierce, Effect effect) {
 		this.name = name;
 		this.attack = attack;
 		this.armorPierce = armorPierce;
 		this.effect = effect;
-		this.rareness = rareness;
-		this.item = item;
+		//this.rareness = rareness;
+	///	this.item = item;
 	}
 	public static String getInfo(Weapon weapon) {
 		return "info: " + weapon;

@@ -27,15 +27,7 @@ public class Inventory{
 		return this.item;
 	}
 	
-public void checkInv(ArrayList<Item> inv){
-		if(GameObject.answer.equals("check inv")) {
-			isChecking = true;
-		}else if(isChecking == true){
-			System.out.println("continue? ");
-			GameObject.answer= GameObject.in.nextLine();
-		}
 
-}
 	/*int checkForNull(Item inv[]){
 		while(c<2 && inv[slot] != null){
 			
@@ -66,16 +58,5 @@ public void checkInv(ArrayList<Item> inv){
 		
 		item.toString();
 	}
-	public void dropItem(Item item) {
-		if(GameObject.answer.equals("drop"+ item)) {
-		if(item.quantity > 1){
-			
-			item.quantity--;
-			
-		}else {
-		item.inInv = false;
-		inv.remove(item);
-			}
-		}
-	}
+	
 }

@@ -8,10 +8,10 @@ import thomas.game.items.FireSwordItem;
 public class FireSword extends Weapon{
 	static Item fireSword = new FireSwordItem();
 	public String toString() {
-		return name() + " attack: " + attack + " piercing: " + armorPierce + effect;
+		return name + " attack: " + attack + " piercing: " + armorPierce + effect;
 	}
 	public FireSword(){
-		super("FireSword", 10, 1, Effect.FLAME, Rarity.ACMERARE, fireSword);
+		super("FireSword", 10, 1, Effect.FLAME);
 	}
 	
 	@Override

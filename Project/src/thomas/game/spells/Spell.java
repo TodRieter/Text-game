@@ -14,7 +14,7 @@ public abstract class Spell implements IWeaponSpell{
 	int timer;
 	
 	public Spell(String name, int level, int cost, int attack, Effect effect){
-		this.name = this.color(level) + name;
+		this.name = name;
 		this.level = level;
 		this.cost = cost;
 		this.attack = attack;
@@ -38,36 +38,28 @@ public abstract class Spell implements IWeaponSpell{
 		default: System.out.println("404 effect was not found");
 		}
 	}
-	public void cast(Entity caster, Entity target){
-		 
-		if(caster.mana >= this.cost){
-			
-			caster.mana = caster.mana - this.cost;
-			target.health = target.health - this.attack;
-			
-		 if(this.effect != null){
-			affect(effect, caster);
-		 }
-		 System.out.println(caster + "\n" + target);
-		}else if (caster.mana <= this.cost){
-			System.out.println("You don't have enough mana!\n" + caster);
-		}
-	}
-	public Colors color(int level){
+	
+	public String color(int level){
 		switch(level){
 		case 1:
-			return Colors.BLUE;
+			return (char)27 + Colors.BLUE.color;
 		case 2:
-			return Colors.GREEN;
+			return (char)27 + Colors.GREEN.color;
 		case 3: 
-			return Colors.YELLOW;
+			return (char)27 + Colors.YELLOW.color;
 		default:
-		return Colors.WHITE;
+		return (char)27 + Colors.WHITE.color;
 		}
 	}
+	public String toString(){
+		return this.name;
+	}
 	public String name(){
-		return color(this.level) + this.name + Colors.RESET;
-		
+		return color(this.level) + this.name + Colors.RESET.color + "";
+	}
+	public String getInfo(){
+		return "Spell: " + color(level) + this.name + (char)27 + Colors.RESET.color + " Mana cost: " + cost + " Attack: " + attack + " Effect: " + effect;
+
 	}
 	public static HashMap<String, Spell> Spells = new HashMap<String, Spell>();
 }
