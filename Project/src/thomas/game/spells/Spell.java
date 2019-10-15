@@ -12,13 +12,15 @@ public abstract class Spell implements IWeaponSpell{
 	public Effect effect;
 	public int range;
 	int timer;
+	public String flavor;
 	
-	public Spell(String name, int level, int cost, int attack, Effect effect){
+	public Spell(String name, int level, int cost, int attack, Effect effect, String flavor){
 		this.name = name;
 		this.level = level;
 		this.cost = cost;
 		this.attack = attack;
 		this.effect = effect;
+		this.flavor = flavor;
 		Spells.put(this.name, this);
 	}
 	
@@ -56,6 +58,9 @@ public abstract class Spell implements IWeaponSpell{
 	}
 	public String name(){
 		return color(this.level) + this.name + Colors.RESET.color + "";
+	}
+	public String getFlavor(){
+		return this.flavor;
 	}
 	public String getInfo(){
 		return "Spell: " + color(level) + this.name + (char)27 + Colors.RESET.color + " Mana cost: " + cost + " Attack: " + attack + " Effect: " + effect;

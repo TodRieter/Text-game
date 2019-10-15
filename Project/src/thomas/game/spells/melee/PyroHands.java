@@ -8,7 +8,7 @@ public class PyroHands extends Spell{
 
 	
 	public PyroHands(){
-		super("Pyro Hands", 5, 1, 5, Effect.FLAME);
+		super("Pyro Hands", 5, 1, 5, Effect.FLAME,"FWOOOSH");
 	}
 	
 	@Override

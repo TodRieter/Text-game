@@ -1,22 +1,21 @@
 package thomas.game;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
-import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JToolTip;
@@ -24,9 +23,7 @@ import javax.swing.JToolTip;
 import thomas.game.entities.Blob;
 import thomas.game.entities.Entity;
 import thomas.game.entities.Player;
-import thomas.game.items.Item;
 import thomas.game.spells.Spell;
-import thomas.game.spells.melee.Boomhands;
 import thomas.game.weapons.Sword;
 import thomas.game.weapons.Weapon;
 
@@ -35,6 +32,7 @@ public class GameGUI extends JFrame implements ActionListener {
 	GameObject g = GameObject.g;
 	JTextArea gameArea;
 	JPanel comboPanel;
+	JPanel playerPanel;
 	JLabel playerStats;
 	JButton b1;
 	JButton b2;
@@ -53,8 +51,8 @@ public class GameGUI extends JFrame implements ActionListener {
 	ArrayList<Entity> enemyList = GameObject.enemyList;
 	Spell spell;
 
-
 	public GameGUI() {
+		playerStats = new JLabel();
 		spellList.add(null);
 		enemyList.add(null);
 		Weapon hand = new Sword("hand", 0, 0, null);
@@ -88,11 +86,10 @@ public class GameGUI extends JFrame implements ActionListener {
 		spellBox = new JComboBox<>(GameObject.player.spellList.toArray());
 		spellBox.addActionListener(this);
 		gameArea.add(spellBox, BorderLayout.NORTH);
-		
 
 		enemyList = GameObject.enemyList;
 		enemyBox = new JComboBox<>(enemyList.toArray());
-		
+
 		weaponBox = new JComboBox<>(inventoryList.toArray());
 
 		// JButton
@@ -107,26 +104,46 @@ public class GameGUI extends JFrame implements ActionListener {
 		// JPanel
 		JPanel controlPanel = new JPanel();
 		comboPanel = new JPanel();
+		// playerPanel = new JPanel();
+		// playerPanel.setLayout(new GridLayout(3,1));
+
+		// playerPanel.add(new JLabel(),new
+		// Rectangle(5,5,10*GameObject.player.health,5));
+		// playerPanel.add(new JLabel(), new
+		// Rectangle(5,5,10*GameObject.player.armor,5));
 		controlPanel.setLayout(new GridLayout(3, 2));
-		playerStats = new JLabel(GameObject.player.toString());
-		playerStats.setFont(new Font ("sans",Font.BOLD, 16));
-		this.add(playerStats,BorderLayout.LINE_START);
+		// playerStats = new JLabel(GameObject.player.toString());
+		// playerStats.setFont(new Font ("sans",Font.BOLD, 16));
+		// this.add(playerStats,BorderLayout.LINE_START);
 		controlPanel.add(b1);
 		controlPanel.add(b2);
 		controlPanel.add(b3);
 		controlPanel.add(b4);
-		
-		
 
-		comboPanel.setLayout(new GridLayout(1,3));
+		comboPanel.setLayout(new GridLayout(1, 3));
 		comboPanel.add(spellBox);
 		comboPanel.add(weaponBox);
 		comboPanel.add(enemyBox);
-	
 
+		JPanel sp = new JPanel() {
+			public void paintComponent(Graphics g) {
+				Graphics g2 = g;
+				super.paintComponent(g2);
+				g2.setColor(Color.RED);
+				g2.fillRect(5, 20, 10 * GameObject.player.health, 10);
+				g2.setColor(Color.gray);
+				for (int i = 0; i < GameObject.player.armor; i++)
+					g2.fillOval((10 * i) + 5, 35, 10, 10);
+				// Shape rect = new Rectangle(5, 25, 10 * GameObject.player.health, 5);
+
+			}
+		};
+
+		this.add(sp, BorderLayout.WEST);
+		sp.add(new JLabel(GameObject.player.toString()));
 		this.add(controlPanel, BorderLayout.SOUTH);
 		this.add(comboPanel, BorderLayout.NORTH);
-
+		// this.add(playerPanel,BorderLayout.PAGE_END);
 		this.pack();
 		this.setVisible(true);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -134,7 +151,6 @@ public class GameGUI extends JFrame implements ActionListener {
 		p = GameObject.player;
 
 //		(Spell spell : p.spellList) {
-//
 //			spellCombo.add(spell.name);
 //			((JComponent) spellCombo.getComponent()).createToolTip().setToolTipText(spell.toString());
 
@@ -142,6 +158,7 @@ public class GameGUI extends JFrame implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		System.out.println("answer = " + GameObject.answer);
 		if (e.getSource() == spellBox) {
 			spell = (Spell) spellBox.getSelectedItem();
 			System.out.println(GameObject.location);
@@ -155,21 +172,18 @@ public class GameGUI extends JFrame implements ActionListener {
 		if (e.getSource() == b1) {
 			GameObject.answer = b1.getText();
 			System.out.println(GameObject.location);
-
 			// updateBox();
 
 		}
 		if (e.getSource() == b2) {
 			GameObject.answer = b2.getText();
 			System.out.println(GameObject.location);
-
 			// updateBox();
 
 		}
 		if (e.getSource() == b3) {
 			GameObject.answer = b3.getText();
 			System.out.println(GameObject.location);
-
 			// updateBox();
 
 		}
@@ -178,39 +192,46 @@ public class GameGUI extends JFrame implements ActionListener {
 			// updateBox();
 
 		}
+		System.out.println(GameObject.answer);
 	}
-
+	
 	public void setOptions(String a1, String a2, String a3, String a4) {
 		this.b1.setText(a1);
 		this.b2.setText(a2);
 		this.b3.setText(a3);
 		this.b4.setText(a4);
+		System.out.println("options answer: "+ GameObject.answer);
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void update() {
+
 		Object spell = spellBox.getSelectedItem();
 		comboPanel.remove(spellBox);
 		spellBox = new JComboBox(GameObject.player.spellList.toArray());
 		comboPanel.add(spellBox);
 		spellBox.setSelectedItem(spell);
-		
+
 		Object item = weaponBox.getSelectedItem();
 		comboPanel.remove(weaponBox);
 		weaponBox = new JComboBox(GameObject.inventoryList.toArray());
 		comboPanel.add(weaponBox);
 		weaponBox.setSelectedItem(item);
-		
+
 		Object enemy = enemyBox.getSelectedItem();
 		comboPanel.remove(enemyBox);
 		enemyBox = new JComboBox(GameObject.enemyList.toArray());
 		comboPanel.add(enemyBox);
 		enemyBox.setSelectedItem(enemy);
 		
-		//playerStats.setFont(new Font("sans", Font.BOLD, 32));
+		
+		if(playerStats != null) {
+			this.remove(playerStats);
+		}
 		playerStats.setFont(new Font ("sans",Font.BOLD, 16));
-
-		playerStats.setText(GameObject.player.toString());
+		playerStats.setText(p.toString());
+		
+		//playerStats.setFont(new Font("sans", Font.BOLD, 32));
 	}
 
 	public void updateEnemyBox() {

@@ -8,12 +8,12 @@ import thomas.game.spells.Spell;
 
 public class Boomhands extends Spell{
 	
-	public Boomhands(String name, int level, int cost, int damage, Effect effect){
-		super(name, level, cost, damage, effect);
+	public Boomhands(String name, int level, int cost, int damage, Effect effect, String flavor){
+		super(name, level, cost, damage, effect, flavor);
 	}
 
 	public Boomhands(){
-		super("Boomhands", 1, 5, 5, Effect.BACKFIRE);
+		super("Boomhands", 1, 5, 5, Effect.BACKFIRE,"**BOOM**\nOUCH!!");
 	}
 	@Override
 	public void affect(Effect effect) {
