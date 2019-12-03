@@ -1,38 +1,87 @@
 package thomas.game.entities;
 
 import java.util.ArrayList;
-import java.util.Scanner;
+
 import thomas.game.GameObject;
-import thomas.game.enums.Rarity;
 import thomas.game.items.Item;
-import thomas.game.player.Inventory;
+import thomas.game.spells.AttackSpell;
 import thomas.game.spells.Spell;
-import thomas.game.spells.melee.Boomhands;
+import thomas.game.spells.StatusEffect;
+import thomas.game.weapons.Sword;
+import thomas.game.weapons.Weapon;
 
 public class Player extends Entity{
 
-	public ArrayList<Spell> spellList = new ArrayList<Spell>(); 
+	private ArrayList<Entity> enemyList = new ArrayList<>();
 	
-
 	public Player(){
-		super("Temperary Name", 20, 5, 1, 50);	
+		super("Temp Name", 100, 5, 5, 500, new ArrayList<Weapon>(), (Weapon)new Sword("Hand",0,0), new ArrayList<Spell>(), null, new ArrayList<StatusEffect>());
+		this.setMaxHealth(health);
 	}
 	public Player(String name){
-		super(name, 20, 5, 1, 50);	
-	}
-	
-	Player(String name, int health, int attack, int armor, int mana, ArrayList<Item> inv, ArrayList<Spell> spellList){
-		this.inv = inv;
-		this.spellList = spellList;
-		this.mana = mana;
+		this();
 		this.name = name;
+		this.setMaxHealth(health);
+	}
+	Player(Weapon weapon){
+		this();
+		selectedWeapon = weapon;
+		this.weaponList.add(weapon);
+	}
+	Player(Spell spell){
+		this();
+		
+		this.selectedSpell = spell;
+		this.spellList.add(spell);
+	}
+	Player(Weapon weapon, Spell spell){
+		this();
+		this.selectedWeapon = weapon;
+		this.weaponList.add(weapon);
+		this.selectedSpell = spell;
+		this.spellList.add(spell);
+	}
+	Player(String name, int health, int attack, int armor, int mana, ArrayList<Weapon> weaponList, Weapon selectedWeapon, ArrayList<Spell> spellList, Spell selectedSpell, ArrayList<StatusEffect> statusEffects){
+		this.name = name;
+		this.health = health;
+		this.attack = attack;
+		this.armor = armor;
+		this.mana = mana;
+		this.weaponList = weaponList;
+		this.selectedWeapon = selectedWeapon;
+		this.spellList = spellList;
+		this.selectedSpell = selectedSpell;
+		this.statusEffects = statusEffects;
 	}
 	@Override
 	public String toString() {
-		return " \nname: " + name + " \nhealth: " + health + " \nmana: " + mana + " \nattack: " + attack + " \narmor: " + armor;
+		return " \nname: " + name + " \nhealth: " + health + " \nmana: " + mana + "\nselected spell: " + selectedSpell +" \nattack: " + getAttack() + "\nselected weapon: " + selectedWeapon + " \narmor: " + getArmor() + "\nstatus effects: " + statusEffects;
+	}
+	public ArrayList<Entity> getEntityList() {
+		return enemyList;
+	}
+	public void setEnemyList(ArrayList<Entity> enemyList) {
+		this.enemyList = enemyList;
+	}
+	
+	public void learnSpell(Spell spell) {
+		this.getSpellList().add(spell);
+		GameObject.gameGui.getSpellBox().setSelectedItem(spell);
+		GameObject.gameGui.update();
+		GameObject.g.display("You learned the spell " + spell.getInfo());
+
 	}
 
-	public ArrayList<Item> inv = new ArrayList<Item>(1);
+	public void addEnemy(Entity enemy) {
+		this.getEntityList().add(enemy);
+		GameObject.gameGui.update();
+	}
+
+	public void removeEnemy(Entity enemy) {
+		this.getEntityList().remove(enemy);
+		GameObject.gameGui.update();
+	}
+	/*public ArrayList<Item> inv = new ArrayList<Item>(1);
 	int size = inv.size();
 	int maxSize = 10;
 	public boolean isChecking;
@@ -82,8 +131,38 @@ public String spellList() {
 public ArrayList<String> getSpellNamesFromList(){
 	ArrayList<String> spellNameList = new ArrayList<>();
 	for(Spell spell : this.spellList){
-		spellNameList.add(spell.name);
+		spellNameList.add(spell.getName());
 	}
 	return spellNameList;
-}
+}*/
+	
+	
+		
+	public void setSelectedSpell(Spell spell) {
+		GameObject.gameGui.getSpellBox().setSelectedItem(spell);
+		selectedSpell = spell;
+	}
+	public Spell getSelectedSpell() {
+		return selectedSpell;
+	}
+	public void setSelectedWeapon(Object item) {
+		selectedWeapon = (Weapon)item;
+	}
+	public void setSelectedWeapon() {
+		selectedWeapon = (Weapon) GameObject.gameGui.getWeaponBox().getSelectedItem();
+	}
+	public Weapon getSelectedWeapon() {
+		return selectedWeapon;
+	}
+	public Entity getSelectedEnemy() {
+		return (Entity)GameObject.gameGui.getEnemyBox().getSelectedItem();
+	}
+	@Override
+	public Entity clone() {
+		return new Player(this.name, this.health, this.attack, this.armor, this.mana, this.weaponList, this.selectedWeapon, this.spellList, this.selectedSpell, this.statusEffects);
+	}
+	public void setSelectedSpell(Object spell) {
+		this.selectedSpell = (Spell)spell;
+		
+	}
 }

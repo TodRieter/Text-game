@@ -1,44 +1,42 @@
 package thomas.game;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 
 //import java.util.ArrayList;
 
 import java.util.Scanner;
 
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
 import thomas.game.entities.Blob;
 import thomas.game.entities.Dragon;
 import thomas.game.entities.Entity;
 import thomas.game.entities.Player;
-import thomas.game.items.Item;
-import thomas.game.items.SwordItem;
+import thomas.game.spells.Boomhands;
+import thomas.game.spells.LesserHealing;
+import thomas.game.spells.MageArmor;
 import thomas.game.spells.Spell;
-import thomas.game.spells.melee.Boomhands;
 import thomas.game.weapons.FireSword;
 import thomas.game.weapons.Sword;
 import thomas.game.weapons.Weapon;
 
 public class GameObject {
-
-	public static int location = 0;
-	Entity dragon = new Dragon();
-	Item sword = new SwordItem();
-	public static Scanner in = new Scanner(System.in);
-	public static Player player = new Player("Tempname");
-	public static String answer = "null String";
+	
 	public static GameObject g = new GameObject();
+	public static int location = 0;
+	public static HashMap<Integer,ArrayList<Integer>> tree = new HashMap<>();
+	public static HashMap<Integer, GameState> gameStates = new HashMap<>();
+	public static Scanner in = new Scanner(System.in);
+	public static Player player = new Player();
+	public static String answer = "null String";
 	String question;
 	public static boolean isAlive = true;
-	public static ArrayList<Entity> enemyList = new ArrayList<>();
-	public static ArrayList<Weapon> inventoryList = new ArrayList<>();
-	public static Entity target;
-	public GameGUI gG;
+	public static Entity enemy;
+	public static GameGUI gameGui;
 
 	public void run() {
 
-		gG = new GameGUI();
+		gameGui = new GameGUI();
 
 		// System.out.println("GameObject" + gG.p.spellList);
 
@@ -58,36 +56,36 @@ public class GameObject {
 
 				// ask("would you like to pick up a " + fireSword.name());
 
-				if(answer.equals("yes")) {
+				if (answer.equals("yes")) {
 					answer = "reset";
 					ask("you wake up on what appeares to be a space ship with no memory of who you are or how you got into space.\n you realize instantly that this will not be a generic adventure... or will it?\nyou look around and see a white door that looks space agey, "
 							+ "a bed, a book shelf, and a grate. Do you?", "go to the door", "go to the bed",
 							"check the bookshelf", "look into the grate");
-				
-				if (answer.equals("go to the door")) {
-					setLocation(2);
-				}
-				if (answer.equals("check the bookshelf")) {
-					setLocation(3);
-				}
-				if (answer.equals("go to the bed")) {
-					setLocation(4);
-				}
-				if (answer.equals("look into the grate")) {
-					setLocation(1);
-				}else if(answer.equals("reset")){
-					continue;
-				}
+
+					if (answer.equals("go to the door")) {
+						setLocation(2);
+					}
+					if (answer.equals("check the bookshelf")) {
+						setLocation(3);
+					}
+					if (answer.equals("go to the bed")) {
+						setLocation(4);
+					}
+					if (answer.equals("look into the grate")) {
+						setLocation(1);
+					} else if (answer.equals("reset")) {
+						continue;
+					}
 				}
 				break;
 
 			case 1:
 				System.out.println("test 3");
-				Entity blob = new Blob();
+				enemy = new Blob();
 				display("you go to the grate and realize that there seems to be somekind of concrete sewere system on this ship (thats odd) and against you better judgement\n "
-						+ "you climb down and enter a dark hallway and see a amorphus blob\n" + blob);
-				addEnemy(blob);
-				fight(player, blob);
+						+ "you climb down and enter a dark hallway and see a amorphus blob\n" + enemy);
+				player.addEnemy(enemy);
+				fight(player, enemy);
 //				if(answer.equalsIgnoreCase("run")) {
 //					display("you run like a coward");
 //					setLocation( -1;
@@ -144,9 +142,12 @@ public class GameObject {
 				if (answer.equals("go to the door")) {
 					setLocation(2);
 				}
+				if (answer.equals("HA im a rebel im going to take a nap!")) {
+					setLocation(8);
+				}
 				break;
 			case 5:
-				gG.gameArea.setText("");
+				gameGui.gameArea.setText("");
 				display("this is game is unfinished!");
 				if (answer.equals("continue")) {
 
@@ -155,17 +156,24 @@ public class GameObject {
 			case 6:
 				Weapon fireSword = new FireSword();
 				Spell boomHands = new Boomhands();
+				Spell lesserHealing = new LesserHealing();
 				pickUp(fireSword);
-				learnSpell(boomHands);
-				Entity dragon = new Dragon();
-				addEnemy(dragon);
-				fight(player, dragon);
+				player.learnSpell(boomHands);
+				player.learnSpell(lesserHealing);
+				player.learnSpell(new MageArmor());
+				enemy = new Dragon();
+				player.addEnemy(enemy);
+				GameObject.g.setEnemy(enemy);
+				gameGui.getEnemyBox().setSelectedItem(enemy);
+				
+				
+				fight(player, enemy);
 				if (answer.equals("run")) {
 					display("you run like a coward");
 					setLocation(5);
 				}
 				if (answer.equals("freeze")) {
-					player.health = 0;
+					player.setHealth(0);
 					display("YOU DIED :(\n I told you it freezing was a bad idea!");
 					isAlive = false;
 				}
@@ -175,6 +183,11 @@ public class GameObject {
 				ask("Who are you trying to convince?", "yourself", "the people who are not there",
 						"three people me, myself, and I", "my doctor");
 				setLocation(5);
+			case 8:
+				display("you try to take a nap but you sense and explosion...***BOOM*** and then it happens and the bed is destroyed and you sense "
+						+ "a new power welling up within you");
+				Spell bh = new Boomhands();
+				player.learnSpell(bh);
 			default:
 				display("you're not supposed to be here the game isn't finished\n"
 						+ " and unfortunally the developer was too lazy to send you back where you are supposed to be so... IDK LOL JSLFKJ LF");
@@ -185,27 +198,29 @@ public class GameObject {
 		}
 	}
 
-	public void pickUp(Weapon item) {
-		ArrayList<Weapon> inv = inventoryList;
-		int maxSize = 10;
-		int size = inv.size();
-		if (inv.size() < maxSize && !inv.contains(item)) {
-			inv.add(item);
-			gG.update();
-			display("you picked up: " + inv.get(inv.indexOf(item)));
-
-		} else if (inv.size() < maxSize && inv.contains(item)) {
+	private void pickUp(Weapon weapon) {
+//		ArrayList<Weapon> weaponList = player.getWeaponList();
+//		int maxSize = 10;
+//		int size = weaponList.size();
+//		if (weaponList.size() < maxSize && !weaponList.contains(weapon)) {
+//			weaponList.add(weapon);
+//			gameGui.update();
+//			display("you picked up: " + weaponList.get(weaponList.indexOf(weapon)));
+//
+//		} else if (weaponList.size() < maxSize && weaponList.contains(weapon)) {
 
 			// item.quantity++;
-			display("you picked up: " + inv.get(inv.indexOf(item)));
+			player.getWeaponList().add(weapon);
+			gameGui.update();
+			display("you picked up: " + weapon);
 
-		} else if (size == maxSize) {
-
-			display("Your backpack is full! you did not pick up: " + item.name);
-		}
-
-		display(item.toString());
-		inventoryList = inv;
+//		} else if (size == maxSize) {
+//
+//			display("Your backpack is full! you did not pick up: " + weapon.name);
+//		}
+//
+//		display(weapon.toString());
+//		player.getWeaponList().add(Weapon.weapons.get(weapon.name));
 
 	}
 
@@ -213,84 +228,97 @@ public class GameObject {
 		ask(text, "continue", "", "", "");
 	}
 
-	public void cast(Entity caster, Entity target, Spell spell) {
+//	private void cast(Entity caster, Entity target, Spell spell) {
+//
+//		if (caster.getMana() >= spell.getCost()) {
+//			if (spell.getEffect().equals(Effect.HEAL)) {
+//				caster.setMana(caster.getMana() - spell.getCost());
+//				target.setHealth(target.getHealth() - spell.getAttack());
+//				display(spell.getFlavor());
+//				updatePlayerInfo();
+//				if (spell.getEffect() != null) {
+//					spell.affect(spell.getEffect(), caster);
+//				}
+//				display(caster + "\n" + target);
+//			} else if (caster.getMana() <= spell.getCost()) {
+//				display("You don't have enough mana!\n" + caster);
+//			}
+//		}
+//	}
 
-		if (caster.mana >= spell.cost) {
-
-			caster.mana = caster.mana - spell.cost;
-			target.health = target.health - spell.attack;
-			display(spell.flavor);
-			if (spell.effect != null) {
-				spell.affect(spell.effect, caster);
-			}
-			display(caster + "\n" + target);
-		} else if (caster.mana <= spell.cost) {
-			display("You don't have enough mana!\n" + caster);
-		}
+	private void updatePlayerInfo() {
+		gameGui.updatePlayerInfo();
+		
 	}
 
-	public void learnSpell(Spell spell) {
-		player.spellList.add(spell);
-		gG.update();
-	}
+	
 
-	public void addEnemy(Entity enemy) {
-		enemyList.add(enemy);
-		gG.update();
-	}
-
-	public void removeEnemy(Entity enemy) {
-		enemyList.remove(enemy);
-		gG.update();
-	}
-
-	public void ask(String question, String a1, String a2, String a3, String a4) {
+	private void ask(String question, String a1, String a2, String a3, String a4) {
 		answer = "reset";
-		gG.gameArea.setText(question);
-		gG.setOptions(a1, a2, a3, a4);
-		while(answer.equals("reset")){
+		gameGui.gameArea.setText(question);
+		gameGui.setOptions(a1, a2, a3, a4);
+		while (answer.equals("reset")) {
 			System.out.print("");
 		}
 	}
 
-	public void fight(Entity attacker, Entity target) {
+	public void fight(Entity attacker, Entity defender) {
 
-		ask("You have encountered a " + target.name, "strike", "cast", "run",
+		ask("You have encountered a " + defender.getName(), "strike", "cast", "run",
 				"freeze(not recommended but you have the option!)");
 		// System.out.println((char)27 + "[31m" + "ERROR MESSAGE IN RED");
 		if (answer.equalsIgnoreCase("Strike") || answer.equalsIgnoreCase("cast")) {
-			while (attacker.health > 0 && !answer.equalsIgnoreCase("run")) {
+			while (attacker.getHealth() > 0 && !answer.equalsIgnoreCase("run")) {
+				gameGui.update();
 				if (answer.equalsIgnoreCase("strike")) {
-					attack(player, target);
+					attacker.attack(defender);
 				} else if (answer.toLowerCase().contains("cast")) {
-					if (answer.equalsIgnoreCase("cast") && player.spellList().length() > 0
-							&& (Spell) gG.spellBox.getSelectedItem() != null) {
-						cast(player, target, (Spell) gG.spellBox.getSelectedItem());
+					if (answer.equalsIgnoreCase("cast") && attacker.getSpellList().size() > 0
+							&& (Spell) gameGui.getSpellBox().getSelectedItem() != null) {
+						Spell spell =  (Spell) gameGui.getSpellBox().getSelectedItem();
+						attacker.cast(defender, spell);
 					}
 				}
-
-				if (attacker.health <= 0) {
+				
+				gameGui.update();
+				if (attacker.getHealth() <= 0) {
 					isAlive = false;
 					display("YOU DIED :(");
 					break;
-				} else if (target.health > 0) {
-					gG.update();
-					ask(target.toString(), "Strike", "Cast", "run", "freeze");
+				} else if (defender.getHealth() > 0) {
+					GameState play = g.makeAMove();
+					if(play.getMove().equals("cast")) {
+						play.getEnemy().getSelectedSpell().cast(player);
+					}else {
+						play.getEnemy().getSelectedWeapon().attack(play.getEnemy(),player);
 
-				} else if (target.health <= 0) {
+					}
+					attacker.triggerStatusEffects();
+					defender.triggerStatusEffects();
+					gameGui.update();
+//					attacker.setHealth(nextGameState.isPlayerTurn ? nextGameState.getPlayer().getHealth() : nextGameState.getEnemy().getHealth());
+//					defender.setHealth( nextGameState.isPlayerTurn ? nextGameState.getPlayer().getHealth() : nextGameState.getEnemy().getHealth());
+//					attacker.setMana(nextGameState.isPlayerTurn ? nextGameState.getPlayer().getMana() : nextGameState.getEnemy().getMana());
+//					defender.setMana(nextGameState.isPlayerTurn ? nextGameState.getPlayer().getMana() : nextGameState.getEnemy().getMana());
+					
+					ask(defender.toString(), "Strike", "Cast", "run", "freeze");
 
-					ask("The " + target.name + " has been slane!", "continue", "", "", "");
-					removeEnemy(target);
+				} else if (defender.getHealth() <= 0) {
+					gameGui.update();
+					ask("The " + defender.getName() + " has been slane!", "continue", "", "", "");
+					player.removeEnemy(defender);
 					return;
 				}
+
 			}
 		} else if (answer.equals("run")) {
 			setLocation(-1);
-			System.out.println(location);
-			gG.gameArea.setText("");
+			//System.out.println(location);
+			gameGui.gameArea.setText("");
 			display("you run like a coward");
 		} else if (answer.contains("freeze") || answer.equalsIgnoreCase("freeze")) {
-			player.health = 0;
+			player.setHealth(0);
+			updatePlayerInfo();
 			display("YOU DIED :(\n" + "I told you freezing was a bad Idea!");
 		} else {
 			setLocation(-1);
@@ -298,41 +326,28 @@ public class GameObject {
 
 	}
 
-	public void attack(Entity attacker, Entity target) {
-		if (attacker.health > 0 && target.health != 0) {
-			target.health = target.getHealth()
-					- (attacker.getAttack() + ((Weapon) gG.weaponBox.getSelectedItem()).attack);
-			attacker.health = attacker.getHealth() - target.getAttack();
-			display(player.toString() + "\n\n" + target.toString());
-		}
-	}
+	
 
-	public void dropItem(Item item) {
-		if (answer.equals("drop" + item)) {
-			if (item.quantity > 1) {
+	
 
-				item.quantity--;
+	/*
+	 * private void dropItem(Item item) { if (answer.equals("drop" + item)) { if
+	 * (item.quantity > 1) {
+	 * 
+	 * item.quantity--;
+	 * 
+	 * } else { item.inInv = false; player.inv.remove(item); } } }
+	 * 
+	 * private void checkInv(ArrayList<Item> inv) { if (answer.equals("check inv"))
+	 * { player.isChecking = true; } else if (player.isChecking == true) {
+	 * System.out.println("continue? "); answer = GameObject.in.nextLine(); }
+	 * 
+	 * }
+	 */
 
-			} else {
-				item.inInv = false;
-				player.inv.remove(item);
-			}
-		}
-	}
-
-	public void checkInv(ArrayList<Item> inv) {
-		if (answer.equals("check inv")) {
-			player.isChecking = true;
-		} else if (player.isChecking == true) {
-			System.out.println("continue? ");
-			answer = GameObject.in.nextLine();
-		}
-
-	}
-
-	public void setLocation(int loc) {
+	private void setLocation(int loc) {
 		location = loc;
-		System.out.println("location answer = " + answer);
+	//	System.out.println("location answer = " + answer);
 		answer = "reset";
 	}
 
@@ -341,5 +356,44 @@ public class GameObject {
 		String rest = name.substring(1, name.length()).toLowerCase();
 		String formatedName = firstLetter + rest;
 		return formatedName;
+	}
+	public GameGUI getGameGui() {
+		return gameGui;
+	}
+
+	public Entity getEnemy() {
+		return GameObject.enemy;
+	}
+
+	public void setEnemy(Entity enemy) {
+	GameObject.enemy = enemy;
+	}
+	public GameState toGameState(){
+		GameState gs = new GameState(player, player.getSelectedEnemy());
+		gs.makeScore();
+		return gs;
+	}
+	public GameState makeAMove() {
+//		int score = this.toGameState().makeScore();
+		this.toGameState().buildGameStateTree(1);
+		ArrayList<Integer> scores = this.toGameState().getChildrenScores();
+//		display("Score: " + score);
+		//display("Scores: " + scores);
+		Collections.sort(scores);
+		System.out.println(gameStates.get(scores.get(scores.size()-1)));
+		int bestScore = scores.get(scores.size()-1);
+		System.out.println(gameStates.containsKey(bestScore));
+		GameState gs = gameStates.get(bestScore);
+		return gs;
+//		System.out.println("Game State Tree: " + gameStates);
+//		this.toGameState().buildTree(5);
+//		System.out.println("Tree: " + tree);
+//		GameState bestGameState = GameState.findBestGameState(g);
+//		System.out.println("Best: " + bestGameState);
+//		GameObject.player = bestGameState.getPlayer();
+//		System.out.println(bestGameState.getPlayer());
+//		GameObject.enemy = bestGameState.getEnemy();
+//		gameGui.getEnemyBox().setSelectedItem(bestGameState.getEnemy());
+//		System.out.println(bestGameState.getEnemy());
 	}
 }

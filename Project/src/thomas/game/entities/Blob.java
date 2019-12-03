@@ -1,19 +1,28 @@
 package thomas.game.entities;
 
-import thomas.game.enums.Colors;
-import thomas.game.enums.Rarity;
+import java.util.ArrayList;
+
+import thomas.game.enums.Effect;
+import thomas.game.items.Item;
+import thomas.game.spells.Spell;
+import thomas.game.spells.StatusEffect;
+import thomas.game.weapons.Weapon;
 
 public class Blob extends Entity {
-	
+
 	@Override
 	public String toString(){
-		return "\n" + name + "\nhealth: " + health + ", \n mana: " + mana + ", \nattack: " + attack + ", \narmor: " + armor;
+		return "\n" + getName() + "\nhealth: " + getHealth() + ", \n mana: " + getMana() + ", \nattack: " + getAttack() + ", \narmor: " + getArmor();
 	}
 	public Blob() {
-	super("Blob", 10, 1, 0, 0);
+		super("Blob", 10, 1, 0, 0, null, null, null, null, new ArrayList<>());
 	}
-	public Blob(String string, int i, int j, int k, int l) {
-super(string, i, j, k, l);
-
+	public Blob(String name, int attack, int health, int mana, int armor, ArrayList<Weapon> inv, Weapon selectedWeapon,
+			ArrayList<Spell> spellList, Spell selectedSpell, ArrayList<StatusEffect> statusEffects) {
+		super(name, attack, health, mana, armor, inv, selectedWeapon, spellList, selectedSpell, statusEffects);
+	}
+	@Override
+	public Entity clone() {
+		return new Blob(this.name, this.attack, this.health, this.mana, this.armor, this.weaponList, this.selectedWeapon, this.spellList, this.selectedSpell, this.statusEffects);
 	}
 }

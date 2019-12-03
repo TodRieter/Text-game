@@ -1,27 +1,27 @@
 package thomas.game.weapons;
 
-import thomas.game.enums.Effect;
-import thomas.game.enums.Rarity;
-import thomas.game.items.Item;
-import thomas.game.items.FireSwordItem;
-
+import thomas.game.GameObject;
+import thomas.game.entities.Entity;
+import thomas.game.items.*;
+import thomas.game.spells.*;
 public class FireSword extends Weapon{
-	static Item fireSword = new FireSwordItem();
-	public String toString() {
-		return name + " attack: " + attack + " piercing: " + armorPierce + effect;
-	}
+	StatusEffect effect = new Flame();
 	public FireSword(){
-		super("FireSword", 10, 1, Effect.FLAME);
+		super("FireSword", 10, 10);
+		this.effect = new Flame();
 	}
 	
-	@Override
-	public void affect(Effect effect) {
-		affect(effect);
-		
-	}
-	@Override
-	public Item toItem() {
-		return item;
-	}
 	
+
+	public Item fireSword = new FireSwordItem();
+	
+	public String toString() {
+		return name + " attack: " + attack + " piercing: " + getArmorPierce() + effect;
+	}
+	@Override
+	public void attack(Entity attacker, Entity target) {
+		target.setHealth(target.getHealth() - (int) ((attacker.getAttack() + this.attack) * target.calcDefence(this)));
+		effect.addStatusEffect(target);
+	}
+
 }
