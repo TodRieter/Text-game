@@ -13,6 +13,8 @@ import thomas.game.entities.Dragon;
 import thomas.game.entities.Entity;
 import thomas.game.entities.Player;
 import thomas.game.spells.Boomhands;
+import thomas.game.spells.DragonFlex;
+import thomas.game.spells.FireBall;
 import thomas.game.spells.LesserHealing;
 import thomas.game.spells.MageArmor;
 import thomas.game.spells.Spell;
@@ -82,9 +84,10 @@ public class GameObject {
 			case 1:
 				System.out.println("test 3");
 				enemy = new Blob();
+				player.addEnemy(enemy);
+				gameGui.getEnemyBox().setSelectedItem(enemy);
 				display("you go to the grate and realize that there seems to be somekind of concrete sewere system on this ship (thats odd) and against you better judgement\n "
 						+ "you climb down and enter a dark hallway and see a amorphus blob\n" + enemy);
-				player.addEnemy(enemy);
 				fight(player, enemy);
 //				if(answer.equalsIgnoreCase("run")) {
 //					display("you run like a coward");
@@ -161,6 +164,8 @@ public class GameObject {
 				player.learnSpell(boomHands);
 				player.learnSpell(lesserHealing);
 				player.learnSpell(new MageArmor());
+				player.learnSpell(new DragonFlex());
+				player.learnSpell(new FireBall());
 				enemy = new Dragon();
 				player.addEnemy(enemy);
 				GameObject.g.setEnemy(enemy);
@@ -199,52 +204,16 @@ public class GameObject {
 	}
 
 	private void pickUp(Weapon weapon) {
-//		ArrayList<Weapon> weaponList = player.getWeaponList();
-//		int maxSize = 10;
-//		int size = weaponList.size();
-//		if (weaponList.size() < maxSize && !weaponList.contains(weapon)) {
-//			weaponList.add(weapon);
-//			gameGui.update();
-//			display("you picked up: " + weaponList.get(weaponList.indexOf(weapon)));
-//
-//		} else if (weaponList.size() < maxSize && weaponList.contains(weapon)) {
-
-			// item.quantity++;
 			player.getWeaponList().add(weapon);
 			gameGui.update();
 			display("you picked up: " + weapon);
-
-//		} else if (size == maxSize) {
-//
-//			display("Your backpack is full! you did not pick up: " + weapon.name);
-//		}
-//
-//		display(weapon.toString());
-//		player.getWeaponList().add(Weapon.weapons.get(weapon.name));
-
 	}
 
 	public void display(String text) {
 		ask(text, "continue", "", "", "");
 	}
 
-//	private void cast(Entity caster, Entity target, Spell spell) {
-//
-//		if (caster.getMana() >= spell.getCost()) {
-//			if (spell.getEffect().equals(Effect.HEAL)) {
-//				caster.setMana(caster.getMana() - spell.getCost());
-//				target.setHealth(target.getHealth() - spell.getAttack());
-//				display(spell.getFlavor());
-//				updatePlayerInfo();
-//				if (spell.getEffect() != null) {
-//					spell.affect(spell.getEffect(), caster);
-//				}
-//				display(caster + "\n" + target);
-//			} else if (caster.getMana() <= spell.getCost()) {
-//				display("You don't have enough mana!\n" + caster);
-//			}
-//		}
-//	}
+
 
 	private void updatePlayerInfo() {
 		gameGui.updatePlayerInfo();
@@ -263,7 +232,11 @@ public class GameObject {
 	}
 
 	public void fight(Entity attacker, Entity defender) {
-
+		if(attacker.getHealth() <= 0) {
+			isAlive = false;
+			display("You died! :(");
+			return;
+		}
 		ask("You have encountered a " + defender.getName(), "strike", "cast", "run",
 				"freeze(not recommended but you have the option!)");
 		// System.out.println((char)27 + "[31m" + "ERROR MESSAGE IN RED");
@@ -272,34 +245,54 @@ public class GameObject {
 				gameGui.update();
 				if (answer.equalsIgnoreCase("strike")) {
 					attacker.attack(defender);
+					gameGui.update();
 				} else if (answer.toLowerCase().contains("cast")) {
 					if (answer.equalsIgnoreCase("cast") && attacker.getSpellList().size() > 0
 							&& (Spell) gameGui.getSpellBox().getSelectedItem() != null) {
+						gameGui.update();
 						Spell spell =  (Spell) gameGui.getSpellBox().getSelectedItem();
+						gameGui.update();
 						attacker.cast(defender, spell);
+						gameGui.update();
 					}
 				}
+				gameGui.update();
+				if(attacker.getHealth() <= 0) {
+					isAlive = false;
+					display("You died! :(");
+					updatePlayerInfo();
+					return;
+				}
 				
+				GameState play = g.makeAMove();
+				
+				//enemy = play.getEnemy();
+				display(enemy.getSelectedSpell().getFlavor());
+				updatePlayerInfo();
+				gameGui.update();
+				enemy = play.getEnemy();
+				if (player.getHealth() <= 0) {
+					isAlive = false;
+					display("YOU DIED :(");
+					break;
+				}
 				gameGui.update();
 				if (attacker.getHealth() <= 0) {
 					isAlive = false;
 					display("YOU DIED :(");
 					break;
 				} else if (defender.getHealth() > 0) {
-					GameState play = g.makeAMove();
-					if(play.getMove().equals("cast")) {
-						play.getEnemy().getSelectedSpell().cast(player);
+					
+					if(play.getMove().equalsIgnoreCase("cast")) {
+					
 					}else {
 						play.getEnemy().getSelectedWeapon().attack(play.getEnemy(),player);
+						display(play.getEnemy().getSelectedWeapon().toString());
+						gameGui.update();
 
 					}
 					attacker.triggerStatusEffects();
-					defender.triggerStatusEffects();
 					gameGui.update();
-//					attacker.setHealth(nextGameState.isPlayerTurn ? nextGameState.getPlayer().getHealth() : nextGameState.getEnemy().getHealth());
-//					defender.setHealth( nextGameState.isPlayerTurn ? nextGameState.getPlayer().getHealth() : nextGameState.getEnemy().getHealth());
-//					attacker.setMana(nextGameState.isPlayerTurn ? nextGameState.getPlayer().getMana() : nextGameState.getEnemy().getMana());
-//					defender.setMana(nextGameState.isPlayerTurn ? nextGameState.getPlayer().getMana() : nextGameState.getEnemy().getMana());
 					
 					ask(defender.toString(), "Strike", "Cast", "run", "freeze");
 
@@ -375,25 +368,21 @@ public class GameObject {
 	}
 	public GameState makeAMove() {
 //		int score = this.toGameState().makeScore();
-		this.toGameState().buildGameStateTree(1);
-		ArrayList<Integer> scores = this.toGameState().getChildrenScores();
-//		display("Score: " + score);
-		//display("Scores: " + scores);
-		Collections.sort(scores);
-		System.out.println(gameStates.get(scores.get(scores.size()-1)));
-		int bestScore = scores.get(scores.size()-1);
-		System.out.println(gameStates.containsKey(bestScore));
-		GameState gs = gameStates.get(bestScore);
+		this.toGameState().buildGameStateTree(0,7);
+		Collections.sort(GameState.deepScores);
+		System.out.println(GameState.deepScores);
+		System.out.println("Game States: " + gameStates);
+		int finalScore = GameState.deepScores.get(GameState.deepScores.size()-1);
+		System.out.println("Final Score: " + finalScore);
+		GameState gs = g.toGameState().findPlay(finalScore);
+		answer = "";
+		GameState.deepScores.clear();
+		enemy.triggerStatusEffects();
+		gameGui.update();
+		gs.getEnemy().getSelectedSpell().cast(player);
+		player.setHealth(gs.getPlayer().getHealth());
+		player.getStatusEffects().addAll(gs.getPlayer().getStatusEffects());
+		gameGui.update();
 		return gs;
-//		System.out.println("Game State Tree: " + gameStates);
-//		this.toGameState().buildTree(5);
-//		System.out.println("Tree: " + tree);
-//		GameState bestGameState = GameState.findBestGameState(g);
-//		System.out.println("Best: " + bestGameState);
-//		GameObject.player = bestGameState.getPlayer();
-//		System.out.println(bestGameState.getPlayer());
-//		GameObject.enemy = bestGameState.getEnemy();
-//		gameGui.getEnemyBox().setSelectedItem(bestGameState.getEnemy());
-//		System.out.println(bestGameState.getEnemy());
 	}
 }

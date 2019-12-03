@@ -63,6 +63,6 @@ public abstract class Weapon{
 		return target.getHealth() - (int) ((attacker.getAttack() + this.attack) * target.calcDefence(this));	
 	}
 	public String toString() {
-		return this.getClass().getTypeName() + ":\nAttack: " + this.attack + ", Pierce: " + this.getArmorPierce();
+		return this.getClass().getTypeName() + ":\nAtk: " + this.attack + ", Amrp: " + this.getArmorPierce();
 	}
 }

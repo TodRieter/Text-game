@@ -15,7 +15,7 @@ public class Player extends Entity{
 	private ArrayList<Entity> enemyList = new ArrayList<>();
 	
 	public Player(){
-		super("Temp Name", 100, 5, 5, 500, new ArrayList<Weapon>(), (Weapon)new Sword("Hand",0,0), new ArrayList<Spell>(), null, new ArrayList<StatusEffect>());
+		super("Temp Name", 800, 5, 5, 500, new ArrayList<Weapon>(), (Weapon)new Sword("Hand",0,0), new ArrayList<Spell>(), null, new ArrayList<StatusEffect>());
 		this.setMaxHealth(health);
 	}
 	public Player(String name){

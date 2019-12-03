@@ -6,7 +6,7 @@ import thomas.game.enums.Effect;
 public class DragonClaw extends Weapon{
 
 	public DragonClaw() {
-		super("DragonClaw", 5, .1);
+		super("DragonClaw", 15, .1);
 
 	}
 }

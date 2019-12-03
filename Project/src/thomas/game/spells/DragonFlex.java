@@ -5,7 +5,7 @@ import thomas.game.entities.Entity;
 public class DragonFlex extends Buff{
 
 	public DragonFlex() {
-		super("Dragon Flex", "The Dragon's muscules seem larger than before...", 1, 5, 5,new StatusEffect[] {new HalfDamage(), new AttackBoost(5)});
+		super("Dragon Flex", "The Dragon's muscules seem larger than before...", 1, 5, 5,new StatusEffect[] {new HalfDamage(), new AttackBoost(10)});
 	}
 public void useBuff(Entity entity){
 	entity.getBuffList().add(this);

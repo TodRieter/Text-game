@@ -24,6 +24,7 @@ public class GameState{
 	static ArrayList<Integer> deepScores = new ArrayList<>();
 	//public static HashMap<Integer, GameState> gameStates = new HashMap<>();
 	ArrayList<Integer> scores = new ArrayList<>();
+	private int lastScore;
 	public GameState(){
 		
 	}
@@ -35,9 +36,10 @@ public GameState(Player player, Entity enemy) {
 }
 
 
-public GameState(Player gsPlayer, Entity gsEnemy, boolean b) {
+public GameState(Player gsPlayer, Entity gsEnemy, boolean isPlayerTurn) {
 	this.player = gsPlayer;
 	this.enemy = gsEnemy;
+	this.isPlayerTurn = isPlayerTurn;
 }
 public GameState(Player player, Entity enemy, String move) {
 	this();
@@ -45,74 +47,96 @@ public GameState(Player player, Entity enemy, String move) {
 	this.enemy = enemy;
 	this.setMove(move);
 }
-void buildTree(int depth){
-	GameObject.tree.put(this.makeScore(), this.getChildrenScores());
-	if(depth > 0) {
-		for(int score : this.getChildrenScores()) {
-			if(!GameObject.gameStates.containsKey(score)) {
-			}
-			GameObject.gameStates.get(score).buildTree(depth-1);
-		}
-	}
-	if(depth == 0) {
-		 deepScores.add(this.score); 
-	}
+public GameState(Player gsPlayer, Entity gsEnemy, boolean isPlayerTurn, int lastScore) {
+	this();
+	this.player = gsPlayer;
+	this.enemy = gsEnemy;
+	this.isPlayerTurn = isPlayerTurn;
+	this.lastScore = lastScore;
 }
-void buildGameStateTree(int depth){
-	while(depth >= 0) {
+
+public GameState(Player gsPlayer, Entity gsEnemy, boolean isPlayerTurn, String move, int lastScore) {
+	this();
+	this.player = gsPlayer;
+	this.enemy = gsEnemy;
+	this.isPlayerTurn = isPlayerTurn;
+	this.lastScore = lastScore;
+	this.move = move;
+}
+public GameState findPlay(Integer finalScore) {
+	GameState gs = GameObject.gameStates.get(finalScore);
+	System.out.println("find Play Score: " + finalScore);
+	if(gs.lastScore == 0) {
+		return gs;
+	}
+	return findPlay(gs.lastScore);
+}
+GameState buildGameStateTree(int depth, int maxDepth){
+	if(depth < maxDepth) {
 		int weaponListSize = isPlayerTurn ? this.player.getWeaponList().size() : this.enemy.getWeaponList().size();
 		int spellListSize = isPlayerTurn ? this.player.getSpellList().size() : this.enemy.getSpellList().size();
-		
-		for(int i = 0; i <= weaponListSize-1; i++) {
-			Entity gsEnemy = enemy.clone();
-			gsEnemy.setSelectedWeapon(gsEnemy.getWeaponList().get(i));
-			Player gsPlayer = (Player)this.player.clone();
-			gsPlayer.setSelectedWeapon(this.player.getWeaponList().get(i));
-			GameState gsw = new GameState(gsPlayer, gsEnemy, !isPlayerTurn);
+		ArrayList<Weapon> weaponList = isPlayerTurn ? this.player.getWeaponList() : this.enemy.getWeaponList();
+		ArrayList<Spell> spellList = isPlayerTurn ? this.player.getSpellList() : this.enemy.getSpellList();
+		Entity gsEnemy = enemy.clone();
+		Player gsPlayer = (Player)this.player.clone();
+		for(Weapon weapon : weaponList) {
+			
+			if(isPlayerTurn) {
+				gsPlayer.setSelectedWeapon(weapon);
+			}else {
+				gsEnemy.setSelectedWeapon(weapon);
+			}
+			GameState gsw = new GameState(gsPlayer, gsEnemy, !isPlayerTurn, "strike", this.score);
 			gsw.score = gsw.makeScore();
 			GameObject.gameStates.put(gsw.score,gsw);
-			System.out.println(GameObject.gameStates);
+		//	System.out.println(GameObject.gameStates);
+			gsw.buildGameStateTree(depth+1, maxDepth);
 		}
-		for(int i = 0; i <= spellListSize-1; i++) {
-			Entity gsEnemy = enemy.clone();
-			gsEnemy.setSelectedSpell(gsEnemy.getSpellList().get(i));
-			Player gsPlayer = (Player)this.player.clone();
-			gsPlayer.setSelectedSpell(this.player.getSpellList().get(i));
-			GameState gs = new GameState(gsPlayer, gsEnemy, !isPlayerTurn);
-			gs.score = gs.makeScore();
-			GameObject.gameStates.put(gs.score,gs);
+		for(Spell spell : spellList) {
+			 	if(isPlayerTurn) {
+			 		gsPlayer.setSelectedSpell(spell);
+			 	}else {
+			 		gsEnemy.setSelectedSpell(spell);
+			 	}
+				GameState gs = new GameState(gsPlayer, gsEnemy, !isPlayerTurn, "Cast", this.score);
+				gs.score = gs.makeScore();
+				GameObject.gameStates.put(gs.score,gs);
+			//	System.out.println(GameObject.gameStates);
+				gs.buildGameStateTree(depth+1, maxDepth);
 		}
-		
-		depth--;
 	}
-	System.out.println("Game State Tree: " + GameObject.gameStates);
+	return this;
 }
 
 	ArrayList<Integer> getChildrenScores() {
-		int weaponListSize = isPlayerTurn ? this.player.getWeaponList().size() : this.enemy.getWeaponList().size();
-		int spellListSize = isPlayerTurn ? this.player.getSpellList().size() : this.enemy.getSpellList().size();
-		
-		ArrayList<Integer> childrenScores = new ArrayList<>(weaponListSize+spellListSize);
+		ArrayList<Weapon> weaponList = isPlayerTurn ? this.player.getWeaponList() : this.enemy.getWeaponList();
+		ArrayList<Spell> spellList = isPlayerTurn ? this.player.getSpellList() : this.enemy.getSpellList();
+		ArrayList<Integer> childrenScores = new ArrayList<>();
+		Player gsPlayer = (Player)this.player.clone();
+		Entity gsEnemy = enemy.clone();
+
 		childrenScores.add(this.score);
-		for(int i = 0; i <= weaponListSize-1;i++) {
-			Entity gsEnemy = enemy.clone();
-			gsEnemy.setSelectedWeapon(enemy.getWeaponList().get(i));
-			Player gsPlayer = (Player)this.player.clone();
-			gsPlayer.setSelectedWeapon(this.player.getWeaponList().get(i));
+		for(Weapon weapon : weaponList) {
+			if(isPlayerTurn) {
+				gsPlayer.setSelectedWeapon(weapon);
+			}else {
+				gsEnemy.setSelectedWeapon(weapon);
+			}
 			GameState gs = new GameState(gsPlayer, gsEnemy, "strike");
 			gs.score = gs.makeScore();
 			childrenScores.add(gs.score == 0 ? 0 : gs.score+this.score);
 		}
-		for(int i = 0; i <= spellListSize-1;i++) {
-			Entity gsEnemy = enemy.clone();
-			gsEnemy.setSelectedSpell(enemy.getSpellList().get(i));
-			Player gsPlayer = (Player)this.player.clone();
-			gsPlayer.setSelectedSpell(this.player.getSpellList().get(i));
+		for(Spell spell : spellList) {
+			if(isPlayerTurn) {
+				gsPlayer.setSelectedSpell(spell);
+			}else {
+				gsEnemy.setSelectedSpell(spell);
+			}
 			GameState gs = new GameState(gsPlayer, gsEnemy,"cast");
 			gs.score = gs.makeScore();
 			childrenScores.add(gs.score == 0 ? 0 : gs.score+this.score);
 		}
-
+		
 	return childrenScores;
 }
 	public static GameState findBestGameState(GameObject g) {
@@ -123,16 +147,20 @@ void buildGameStateTree(int depth){
 	}
 	
 	public GameState fight() {
-		Entity attacker = isPlayerTurn ? player.clone() : enemy;
-		Entity defender = !isPlayerTurn ? player.clone() : enemy;
+		Entity attacker = isPlayerTurn ? player : enemy;
+		Entity defender = !isPlayerTurn ? player : enemy;
 
 				if (getMove().equalsIgnoreCase("strike")) {
-					attacker.attack(defender);
+					defender.attack(attacker);
 				} else if (getMove().equalsIgnoreCase("cast")) {
 					if (getMove().equalsIgnoreCase("cast")) {
-						attacker.getSelectedSpell().cast(defender);
+						defender.getSelectedSpell().cast(attacker);
 					}
 				}
+				if (attacker.getHealth() <= 0) {
+					isAlive = false;
+				} else if (defender.getHealth() <= 0) {
+			}
 				attacker.triggerStatusEffects();
 				defender.triggerStatusEffects();
 				if (attacker.getHealth() <= 0) {
@@ -200,10 +228,22 @@ void buildGameStateTree(int depth){
 			return scores;
 	}
 	Integer makeScore(){
+		int score;
 		if(this.player.getHealth() <= 0 || this.enemy.getHealth() <= 0) {
+			GameObject.gameStates.put(isPlayerTurn ? 0: Integer.MAX_VALUE, this);
+			deepScores.add(isPlayerTurn ? 0: Integer.MAX_VALUE);
 			return isPlayerTurn ? 0:Integer.MAX_VALUE;
 		}
-		int score = this.isPlayerTurn ? getEnemy().getHealth() /(getEnemy().getHealth() - fight().enemy.getHealth()) : (player.getHealth() - fight().player.getHealth());
+		if((getEnemy().getHealth() - fight().getEnemy().getHealth())==0) {
+			 score = this.isPlayerTurn ? (100*getEnemy().getHealth())/(1+getEnemy().getHealth() - fight().getEnemy().getHealth()) : (player.getHealth() - fight().player.getHealth());
+			this.score = score;
+			deepScores.add(this.score);
+			GameObject.gameStates.put(this.score, this);
+			return score;
+		}
+		
+		score = this.isPlayerTurn ? (100*getEnemy().getHealth())/(1+getEnemy().getHealth() - fight().enemy.getHealth()) : (player.getHealth() - fight().player.getHealth());
+
 		this.score = score;
 		GameObject.gameStates.put(score, this);
 		return score;

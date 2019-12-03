@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import thomas.game.enums.Effect;
 import thomas.game.items.Item;
-import thomas.game.spells.DragonsBreath;
 import thomas.game.spells.*;
 import thomas.game.weapons.DragonClaw;
 import thomas.game.weapons.DragonTeeth;
@@ -22,12 +21,14 @@ public class Dragon extends Entity{
 	public Dragon(){
 		super("Dragon", 1000, 8, 10, 10, new ArrayList<Weapon>(), (Weapon)new DragonClaw(), new ArrayList<Spell>(), new DragonsBreath(), new ArrayList<StatusEffect>());
 		this.spellList.add(new DragonsBreath());
+		this.spellList.add(new DragonFlex());
 		this.weaponList.add(new DragonClaw());
 		this.maxHealth = health;
 	}
 	Dragon(ArrayList<Weapon> weaponList, ArrayList<Spell> spellList){
 		this.weaponList = weaponList;
 		this.spellList = spellList;
+		this.spellList.add(new DragonFlex());
 	}
 	Dragon(Weapon weapon){
 		this();
@@ -38,6 +39,7 @@ public class Dragon extends Entity{
 		this();
 		this.selectedSpell = spell;
 		this.spellList.add(spell);
+		this.spellList.add(new DragonFlex());
 	}
 	Dragon(String name, int health, int attack, int armor, int mana, ArrayList<Weapon> inv, Weapon selectedWeapon, ArrayList<Spell> spellList, Spell selectedSpell, ArrayList<StatusEffect> statusEffects){
 		super(name, health, attack, armor, mana, inv, selectedWeapon, spellList, selectedSpell, statusEffects);

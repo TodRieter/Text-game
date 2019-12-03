@@ -16,7 +16,7 @@ public class FireSword extends Weapon{
 	public Item fireSword = new FireSwordItem();
 	
 	public String toString() {
-		return name + " attack: " + attack + " piercing: " + getArmorPierce() + effect;
+		return "Name: " + name + " atk: " + attack + " pierce: " + getArmorPierce() + effect.getName();
 	}
 	@Override
 	public void attack(Entity attacker, Entity target) {
